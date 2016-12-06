@@ -1,3 +1,17 @@
-(function(){
-  console.log("testing module... done");
+(function () {
+    var dashboard = {
+        init: function () {
+
+        },
+        cacheDom: function () {
+
+        },
+        render: function () {
+
+        },
+        bindEvents: function () {
+
+        }
+    };
+    dashboard.init();
 })();

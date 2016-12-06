@@ -28,17 +28,16 @@
         <div class="row noPadding">
             <div class="col-xs-12 vista-header noPadding">  
                 <img  id="backArrow" class="inline arrow" src="img/back-android.png">
-                <h4 class="inline headerTitle">Detalle por Rubro</h4>
+                <h4 class="inline headerTitle">Dashboard</h4>
                 <h3 id="categoria-slide"></h3>
             </div>
         </div>
+        <!--TEMPLATE DEBERIA EMPEZAR AQUI-->
         <div class="row vista-resumen">
             <div class="col-xs-7">
                 <div class="row">
                     <div class="noPadding col-xs-12">
-                        <select class="absolute inline" name="" id="productos">
-                        </select>
-                        <img class="caretStyle fix-flecha" src="img/arrow_select.png">
+                        <select class="absolute inline" name="" id="productos"></select>
                     </div>
                 </div>
             </div>
@@ -104,6 +103,8 @@
             <div class="col-xs-12 ct-chart ct-square graph">
             </div>
         </div>
+        <!--TEMPLATE DEBERIA FINALIZAR AQUI-->
+
     </div>
 
     
@@ -114,6 +115,7 @@
     <!--SLICK-->
     <script src="lib/slick-1.6.0/slick/slick.min.js"></script>
     <script src="modulo.js"></script>
+    <script src="slick-init.js"></script>
 
     <script>	  
       function sortData (data){
@@ -132,24 +134,12 @@
         data = dataAux;
         return data;
       }
+        
       if(respuesta.length > 0){
         respuesta = sortData(respuesta);
       };
       
-        $(document).ready(function(){
-            slider = $(".slider").slick({
-                arrows: false,
-                dots: false,
-            });
-            if(respuesta.length > 0){
-                getCategoryInfoSlide(0);
-            }
-            else{
-                $("#icon-place").remove();
-                $("#productos").remove();
-                $("#resumen").text("No existen datos asociados.").addClass("center-text");
-            }
-        });
+        
         
         $(".slider").on("beforeChange", function(event, slick, currentSlide, nextSlide){
             getCategoryInfoSlide(nextSlide);
@@ -214,9 +204,9 @@
 
             $(".slider").slick("slickGoTo",index,false);
             
-            var montoDebito = parseFloat(category.montoDebito.valor);
-            var montoCredito = parseFloat(category.montoCredito.valor);
-            var saldo = parseFloat(category.saldo.valor);         
+            var montoDebito = category.montoDebito.valor;
+            var montoCredito = category.montoCredito.valor;
+            var saldo = category.saldo.valor;         
             var percentageCredito = (montoCredito * 100) / saldo;
             var percentageDebito = (montoDebito * 100) / saldo;
 

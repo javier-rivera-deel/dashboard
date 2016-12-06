@@ -1,5 +1,5 @@
 *{
-    background-color: rgba(0,0,0,0.15);
+/*    background-color: rgba(0,0,0,0.15);*/
 }
 
 *:focus {
@@ -25,7 +25,6 @@ body {
 .headerTitle {
     vertical-align: middle;
     padding-top: 3%;
-    padding-left: 5%
 }
 
 .vista-header {
@@ -135,9 +134,6 @@ body {
     fill: white;
 }
 
-
-/*.ct-vertical{margin-left: -15vw;}*/
-
 select {
     width: 100%;
     font-size: 2.5em;
@@ -149,9 +145,6 @@ select {
     border: none;
     outline: none;
     font-family: "Open Sans", sans-serif;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
 }
 
 .selected {
