@@ -1,5 +1,4 @@
 <html>
-<script src="respuesta-jerodriguez.js"></script>
 <head>
 
     <meta charset="UTF-8">
@@ -27,7 +26,6 @@
     <div class="container-fluid">
         <div class="row noPadding">
             <div class="col-xs-12 vista-header noPadding">  
-                <img  id="backArrow" class="inline arrow" src="img/back-android.png">
                 <h4 class="inline headerTitle">Dashboard</h4>
                 <h3 id="categoria-slide"></h3>
             </div>
@@ -37,7 +35,13 @@
             <div class="col-xs-7">
                 <div class="row">
                     <div class="noPadding col-xs-12">
-                        <select class="absolute inline" name="" id="productos"></select>
+                        <select class="absolute inline" name="" id="categories-select">
+                            <script id="categories-list" type="text/template">
+                                {{#categories}}
+                                    <option>{{.}}</option>
+                                {{/categories}}
+                            </script> 
+                        </select>
                     </div>
                 </div>
             </div>
@@ -47,18 +51,19 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-xs-12 saldo"></div>
+                    <div class="col-xs-12 totalAmount"></div>
                 </div>
             </div>
         </div>
-        <div class="row vista-widget">
+        
+     
+        <div class="row vista-widget hidden">
             <div class="col-xs-3 descriptionProductos textRight">    
                 <h2 class="textRight" id="tdc-label"></h2>
                 <div class="col-xs-12 montosDisplay noPadding textRight" id="monto-tdc"></div>  
             </div>
 
             <!--PIEZA CENTRAL-->
-
             <!--CONTENEDOR-->
             <div class="col-xs-6 descriptionProductos text-center middle red">
 
@@ -97,7 +102,7 @@
                 </div>
             </div>
         </div>
-        <div class="row vista-grafica">
+        <div class="row vista-grafica hidden">
             <div class="col-xs-12 titlePadding mainTitle graph-title" id="resumen">
             </div>
             <div class="col-xs-12 ct-chart ct-square graph">
@@ -114,353 +119,316 @@
     <script src="lib/chartistjs/chartist.min.js"></script>
     <!--SLICK-->
     <script src="lib/slick-1.6.0/slick/slick.min.js"></script>
+    <!--MUSTACHE_JS-->
+    <script src="lib/mustache.js-master/mustache.min.js"></script>
+    <script src="respuesta-jerodriguez.js"></script>
+    <script src="populateSelect.js"></script>
+    <script src="sortData.js"></script>
+    <script src="subArray.js"></script>
     <script src="modulo.js"></script>
-    <script src="slick-init.js"></script>
+    
+    
 
     <script>	  
-      function sortData (data){
-        for(var i in data){
-          if (data[i].categoria == "OTROS"){
-              var aux = data[data.length-1];
-              data[data.length-1] = data[i];
-              data[i] = aux;
-              break;
-          }
-        }
-        dataEnd = data[data.length-1];
-        dataAux = data.splice(0,data.length-1);
-        dataAux.sort(function(a, b){return b.saldo.valor-a.saldo.valor;});
-        dataAux.push(dataEnd);
-        data = dataAux;
-        return data;
-      }
-        
-      if(respuesta.length > 0){
-        respuesta = sortData(respuesta);
-      };
       
         
+      
         
-        $(".slider").on("beforeChange", function(event, slick, currentSlide, nextSlide){
-            getCategoryInfoSlide(nextSlide);
-        });
+//        $(".slider").on("beforeChange", function(event, slick, currentSlide, nextSlide){
+//            //getCategoryInfoSlide(nextSlide);
+//        });
+//        
+        //var categorySelected = $("#productos option:selected").text();
         
-        function mobileInfo(JSONBUFFER) {
-            var strMessage = JSON.stringify(JSONBUFFER);
-            if (window.webkit && window.webkit.messageHandlers) webkit.messageHandlers.initApp.postMessage(strMessage);
-            else if (window.external && typeof window.external.notify == "unknown") window.external.notify(strMessage);
-            else {
-                console.log(strMessage);
-                Android.proxyJavascript(strMessage);
-            }
-        };
-       
-        $("#backArrow").click(function() {
-            var obj = {
-                "event": "click",
-                "target": targetVar,
-                "action": "Volver"
-            };
-            var strObj = JSON.stringify(obj);
-            mobileInfo(obj);
-        });
-        
-        var categorySelected = $("#productos option:selected").text();
-        
-        function getCategory(){
-            /*MANEJO DE ERRORES TEMPORAL*/
-            if(respuesta.length == 0){
-                $("#icon-place").remove();
-                $("#productos").remove();
-                $("#resumen").text("No existen datos asociados.").addClass("center-text");
-            }
-            else{
-                $.each(respuesta,function(key) 
-                   {
-                    var categoria = respuesta[key].categoria;
-                    var imgurl = respuesta[key].imagen;
-                    option = document.createElement("option");
-                    $(option).addClass("selected")
-                        .attr("categoria",categoria)
-                        .text(categoria)
-                        .appendTo("#productos");
-
-                    imageContainer = document.createElement("div");
-                    imageIcon = document.createElement("img");
-                    $(imageIcon).appendTo(imageContainer)
-                        .attr({"id":"icon-place","src": imgurl, "categoria": categoria})
-                        .addClass("center-adjust relative img-responsive");
-                    $(imageContainer).appendTo($(".slider"));
-
-                });
-            }
-        };
-        function getMaxOfArray(numArray) {
-              return Math.max.apply(null, numArray);
-            }
-
-        function getCategoryInfoSlide(index){
-            var category = respuesta[index];
-
-            $(".slider").slick("slickGoTo",index,false);
-            
-            var montoDebito = category.montoDebito.valor;
-            var montoCredito = category.montoCredito.valor;
-            var saldo = category.saldo.valor;         
-            var percentageCredito = (montoCredito * 100) / saldo;
-            var percentageDebito = (montoDebito * 100) / saldo;
-
-            switch ((category.categoria).toUpperCase()) {
-                case "HOGAR":
-                    var color = "1988BD";
-                    /*HOGAR*/
-                    var categoria = (category.categoria).toUpperCase();
-                    break;
-                case "INDUMENTARIA":
-                    var color = "93278F";
-                    /*INDUMENTARIA*/
-                    var categoria = (category.categoria).toUpperCase();
-                    break;
-                case "AUTOMOVIL":
-                    var color = "F4162A";
-                    /*AUTOMOVIL*/
-                    var categoria = (category.categoria).toUpperCase();
-                    break;
-                case "GASTRONOMIA":
-                    var color = "F68837";
-                    /*GASTRONOMIA*/
-                    var categoria = (category.categoria).toUpperCase();
-                    break;
-                case "TURISMO":
-                    var color = "1fa76b";
-                    /*TURISMO*/
-                    var categoria = (category.categoria).toUpperCase();
-                    break;
-                case "OTROS":
-                    var color = "2C4E8E";
-                    /*OTROS*/
-                    var categoria = (category.categoria).toUpperCase();
-                    break;
-                case "SUPERMERCADOS":
-                    var color = "569852";
-                    /*SUPERMERCADOS*/
-                    var categoria = (category.categoria).toUpperCase();
-                    break;
-                default:
-                    var color = "1988BD";
-                    /*OTROS*/
-                    var categoria = (category.categoria).toUpperCase();
-            }
-           /* $("#productos option:selected").val(index);*/
-            $("#productos").prop("selectedIndex", index); 
-          
-          var error = false;
-            if(category.hasOwnProperty("error")){
-                  $("#resumen").text(category.error);
-                  error = true;
-              }
-            if(!error)
-             $("#resumen").text("Resumen Comparativo Histórico");
-            
-            if(category.sumaHistorico <= 0){
-                $("#icon-place").remove();
-                $("#productos").remove();
-                $("#resumen").text("No hay consumo").addClass("center-text");
-            };
-          
-            $("body").css("background-color","#"+color);
-            $("#tdc-label").text("TARJETA DE CRÉDITO");   
-            $("#tdd-label").text("TARJETA DE DÉBITO");  
-            $(".saldo").text(category.moneda+" "+category.saldo.formateado);
-            $("#monto-tdd").text(category.moneda+" "+category.montoDebito.formateado);
-            $("#monto-tdc").text(category.moneda+" "+category.montoCredito.formateado);
-            $("#fecha").text(category.fecha);
-
-            var datosHistorio = Array();
-            datosHistorio = category.historico;
-            if(datosHistorio.length > 12)
-            {
-                datosHistorio = datosHistorio.slice(Math.max(datosHistorio.length - 12));
-            }
-            var arrayLabel = Array();
-            var arrayValor = Array();
-
-            $.each(datosHistorio, function(pos){
-                arrayLabel[pos] = numberToMonth(datosHistorio[pos].mes) +" "+ datosHistorio[pos].anio;
-                arrayValor[pos] = parseFloat(datosHistorio[pos].importe.valor);
-            });
-            /*var reg = new RegExp("(\d)(?=(\d{3})+(?!\d))","g");*/
-            var maxVal = getMaxOfArray(arrayValor);
-
-            /*SI EL RUBRO TRAE UN SOLO VALOR, SE AÑANE SALDO*/
-            if(parseFloat(datosHistorio[0].importe.valor) > saldo){
-                arrayValor.unshift(saldo);
-            }
-            else{
-                arrayValor.unshift(parseFloat(datosHistorio[0].importe.valor));
-            }
-		  
-		 
-
-            var chart = new Chartist.Line(".ct-chart", {
-                labels: arrayLabel,
-                series: [arrayValor]
-            },{
-                showPoint: false,
-                divisor: 2,
-                showArea: true,
-                lineSmooth: Chartist.Interpolation.simple({
-                    tension: 3
-                }),
-                axisX: {
-                   /* onlyInteger:true*/
-                },
-                axisY:{
-                    position: "end",
-                    type: Chartist.FixedScaleAxis,
-                    ticks: [Math.round((maxVal * 20)/100),Math.round((maxVal * 40)/100),Math.round((maxVal * 60)/100),Math.round((maxVal * 80)/100),Math.round(maxVal)],
-                    high: Math.round(maxVal), 
-                    low: 0,
-                    onlyInteger: true,
-                    labelInterpolationFnc: function(value, index) {
-                        return category.moneda +value.toString().replace(/./g, function(c, i, a)
-                                                                            {return i && c !== "," && ((a.length - i) % 3 === 0) ? "." + c : c;});
-                    },
-                }/*PADDING*/
-            });
-            chart.on("draw", function(data) {
-                if(data.type === "line" || data.type === "area") {
-                    data.element.animate({
-                        d: {
-                            begin: 2000 * data.index,
-                            dur: 4000,
-                            from: data.path.clone().scale(1, 0).translate(0, data.chartRect.height()).stringify(),
-                            to: data.path.clone().stringify(),
-                            easing: Chartist.Svg.Easing.easeOutQuint
-                        }
-                    });
-                }
-            });
-            if(montoCredito > 0){}else{montoCredito = ""};
-            var outergauge = new Chartist.Pie("#ct-gauge", {
-                series: [montoCredito]
-            },{
-                donut: true,
-                donutWidth: "6em",
-                startAngle: 0,
-                total: saldo,
-                showLabel: false
-            });
-            outergauge.on("draw", function(data) {
-                if(data.type === "slice") {
-                    var pathLength = data.element._node.getTotalLength();
-                    data.element.attr({
-                        "stroke-dasharray": pathLength + "% " + pathLength + "%"
-                    });
-                    var animationDefinition = {
-                        "stroke-dashoffset": {
-                            id: "anim" + data.index,
-                            dur: 2500,
-                            from: -pathLength + "%",
-                            to:  "0%",
-                            easing: Chartist.Svg.Easing.easeOutQuint,            
-                            fill: "freeze"
-                        }
-                    };
-                    data.element.animate(animationDefinition, false);
-                }
-            });
-          if(montoDebito > 0){}else{montoDebito = ""};
-            var innerGauge  = new Chartist.Pie("#ct-gauge-small", {
-                series: [montoDebito]
-            },{
-                chartPadding: 19,
-                donut: true,
-                donutWidth: "6em",
-                startAngle: 0,
-
-                total: saldo,
-                showLabel: false
-            });
-            innerGauge.on("draw", function(data) {
-                if(data.type === "slice") {
-                    var pathLength = data.element._node.getTotalLength();
-                    data.element.attr({
-                        "stroke-dasharray": pathLength + "% " + pathLength + "%"
-                    });
-                    var animationDefinition = {
-                        "stroke-dashoffset": {
-                            id: "anim" + data.index,
-                            dur: 3000,
-                            from: -pathLength + "%",
-                            to:  "0%",
-                            easing: Chartist.Svg.Easing.easeOutQuint,
-                            fill: "freeze"
-                        }
-                    };
-                    if(data.index !== 0) {
-                        animationDefinition["stroke-dashoffset"].begin = "anim" + (data.index - 1) + ".end";
-                    }
-                    data.element.attr({
-                        "stroke-dashoffset": -pathLength + "%"
-                    });
-
-                    data.element.animate(animationDefinition, false);
-                }
-            });
-        };
-
-        $("#productos").change(function(){
-            getCategoryInfoSlide($("#productos option:selected").index());
-        });
-
-        getCategory();
-
-        function numberToMonth(number){
-            switch(number){
-                case "01":
-                    number = "ENE";
-                    break;
-                case "02":
-                    number = "FEB";
-                    break;
-                case "03":
-                    number = "MAR";
-                    break;
-                case "04":
-                    number = "ABR";
-                    break;
-                case "05":
-                    number = "MAY";
-                    break;
-                case "06":
-                    number = "JUN";
-                    break; 
-                case "07":
-                    number = "JUL";
-                    break;
-                case "08":
-                    number = "AGO";
-                    break;
-                case "09":
-                    number = "SEP";
-                    break;
-                case "10":
-                    number = "OCT";
-                    break;
-                case "11":
-                    number = "NOV";
-                    break;
-                case "12":
-                    number = "DIC";
-                    break;  
-            }
-            return number;
-        };
-        
-        function round(number){
-           return Math.ceil(number/100)*100
-        }
+//        function getCategory(){
+//            /*MANEJO DE ERRORES TEMPORAL*/
+//            if(respuesta.length == 0){
+//                $("#icon-place").remove();
+//                $("#productos").remove();
+//                $("#resumen").text("No existen datos asociados.").addClass("center-text");
+//            }
+//            else{
+//                $.each(respuesta,function(key) 
+//                   {
+//                    var categoria = respuesta[key].categoria;
+//                    var imgurl = respuesta[key].imagen;
+//                    option = document.createElement("option");
+//                    $(option).addClass("selected")
+//                        .attr("categoria",categoria)
+//                        .text(categoria)
+//                        .appendTo("#productos");
+//
+//                    imageContainer = document.createElement("div");
+//                    imageIcon = document.createElement("img");
+//                    $(imageIcon).appendTo(imageContainer)
+//                        .attr({"id":"icon-place","src": imgurl, "categoria": categoria})
+//                        .addClass("center-adjust relative img-responsive");
+//                    $(imageContainer).appendTo($(".slider"));
+//
+//                });
+//            }
+//        };
+//        function getMaxOfArray(numArray) {
+//              return Math.max.apply(null, numArray);
+//            }
+//        function getCategoryInfoSlide(index){
+//            var category = respuesta[index];
+//
+//            $(".slider").slick("slickGoTo",index,false);
+//            
+//            var montoDebito = category.montoDebito.valor;
+//            var montoCredito = category.montoCredito.valor;
+//            var saldo = category.saldo.valor;         
+//            var percentageCredito = (montoCredito * 100) / saldo;
+//            var percentageDebito = (montoDebito * 100) / saldo;
+//
+//            switch ((category.categoria).toUpperCase()) {
+//                case "HOGAR":
+//                    var color = "1988BD";
+//                    /*HOGAR*/
+//                    var categoria = (category.categoria).toUpperCase();
+//                    break;
+//                case "INDUMENTARIA":
+//                    var color = "93278F";
+//                    /*INDUMENTARIA*/
+//                    var categoria = (category.categoria).toUpperCase();
+//                    break;
+//                case "AUTOMOVIL":
+//                    var color = "F4162A";
+//                    /*AUTOMOVIL*/
+//                    var categoria = (category.categoria).toUpperCase();
+//                    break;
+//                case "GASTRONOMIA":
+//                    var color = "F68837";
+//                    /*GASTRONOMIA*/
+//                    var categoria = (category.categoria).toUpperCase();
+//                    break;
+//                case "TURISMO":
+//                    var color = "1fa76b";
+//                    /*TURISMO*/
+//                    var categoria = (category.categoria).toUpperCase();
+//                    break;
+//                case "OTROS":
+//                    var color = "2C4E8E";
+//                    /*OTROS*/
+//                    var categoria = (category.categoria).toUpperCase();
+//                    break;
+//                case "SUPERMERCADOS":
+//                    var color = "569852";
+//                    /*SUPERMERCADOS*/
+//                    var categoria = (category.categoria).toUpperCase();
+//                    break;
+//                default:
+//                    var color = "1988BD";
+//                    /*OTROS*/
+//                    var categoria = (category.categoria).toUpperCase();
+//            }
+//           /* $("#productos option:selected").val(index);*/
+//            $("#productos").prop("selectedIndex", index); 
+//          
+//          var error = false;
+//            if(category.hasOwnProperty("error")){
+//                  $("#resumen").text(category.error);
+//                  error = true;
+//              }
+//            if(!error)
+//             $("#resumen").text("Resumen Comparativo Histórico");
+//            
+//            if(category.sumaHistorico <= 0){
+//                $("#icon-place").remove();
+//                $("#productos").remove();
+//                $("#resumen").text("No hay consumo").addClass("center-text");
+//            };
+//          
+//            $("body").css("background-color","#"+color);
+//            $("#tdc-label").text("TARJETA DE CRÉDITO");   
+//            $("#tdd-label").text("TARJETA DE DÉBITO");  
+//            $(".saldo").text(category.moneda+" "+category.saldo.formateado);
+//            $("#monto-tdd").text(category.moneda+" "+category.montoDebito.formateado);
+//            $("#monto-tdc").text(category.moneda+" "+category.montoCredito.formateado);
+//            $("#fecha").text(category.fecha);
+//
+//            var datosHistorio = Array();
+//            datosHistorio = category.historico;
+//            if(datosHistorio.length > 12)
+//            {
+//                datosHistorio = datosHistorio.slice(Math.max(datosHistorio.length - 12));
+//            }
+//            var arrayLabel = Array();
+//            var arrayValor = Array();
+//
+//            $.each(datosHistorio, function(pos){
+//                arrayLabel[pos] = numberToMonth(datosHistorio[pos].mes) +" "+ datosHistorio[pos].anio;
+//                arrayValor[pos] = parseFloat(datosHistorio[pos].importe.valor);
+//            });
+//            /*var reg = new RegExp("(\d)(?=(\d{3})+(?!\d))","g");*/
+//            var maxVal = getMaxOfArray(arrayValor);
+//
+//            /*SI EL RUBRO TRAE UN SOLO VALOR, SE AÑANE SALDO*/
+//            if(parseFloat(datosHistorio[0].importe.valor) > saldo){
+//                arrayValor.unshift(saldo);
+//            }
+//            else{
+//                arrayValor.unshift(parseFloat(datosHistorio[0].importe.valor));
+//            }
+//		  
+//		 
+//
+//            var chart = new Chartist.Line(".ct-chart", {
+//                labels: arrayLabel,
+//                series: [arrayValor]
+//            },{
+//                showPoint: false,
+//                divisor: 2,
+//                showArea: true,
+//                lineSmooth: Chartist.Interpolation.simple({
+//                    tension: 3
+//                }),
+//                axisX: {
+//                   /* onlyInteger:true*/
+//                },
+//                axisY:{
+//                    position: "end",
+//                    type: Chartist.FixedScaleAxis,
+//                    ticks: [Math.round((maxVal * 20)/100),Math.round((maxVal * 40)/100),Math.round((maxVal * 60)/100),Math.round((maxVal * 80)/100),Math.round(maxVal)],
+//                    high: Math.round(maxVal), 
+//                    low: 0,
+//                    onlyInteger: true,
+//                    labelInterpolationFnc: function(value, index) {
+//                        return category.moneda +value.toString().replace(/./g, function(c, i, a)
+//                                                                            {return i && c !== "," && ((a.length - i) % 3 === 0) ? "." + c : c;});
+//                    },
+//                }/*PADDING*/
+//            });
+//            chart.on("draw", function(data) {
+//                if(data.type === "line" || data.type === "area") {
+//                    data.element.animate({
+//                        d: {
+//                            begin: 2000 * data.index,
+//                            dur: 4000,
+//                            from: data.path.clone().scale(1, 0).translate(0, data.chartRect.height()).stringify(),
+//                            to: data.path.clone().stringify(),
+//                            easing: Chartist.Svg.Easing.easeOutQuint
+//                        }
+//                    });
+//                }
+//            });
+//            if(montoCredito > 0){}else{montoCredito = ""};
+//            var outergauge = new Chartist.Pie("#ct-gauge", {
+//                series: [montoCredito]
+//            },{
+//                donut: true,
+//                donutWidth: "6em",
+//                startAngle: 0,
+//                total: saldo,
+//                showLabel: false
+//            });
+//            outergauge.on("draw", function(data) {
+//                if(data.type === "slice") {
+//                    var pathLength = data.element._node.getTotalLength();
+//                    data.element.attr({
+//                        "stroke-dasharray": pathLength + "% " + pathLength + "%"
+//                    });
+//                    var animationDefinition = {
+//                        "stroke-dashoffset": {
+//                            id: "anim" + data.index,
+//                            dur: 2500,
+//                            from: -pathLength + "%",
+//                            to:  "0%",
+//                            easing: Chartist.Svg.Easing.easeOutQuint,            
+//                            fill: "freeze"
+//                        }
+//                    };
+//                    data.element.animate(animationDefinition, false);
+//                }
+//            });
+//          if(montoDebito > 0){}else{montoDebito = ""};
+//            var innerGauge  = new Chartist.Pie("#ct-gauge-small", {
+//                series: [montoDebito]
+//            },{
+//                chartPadding: 19,
+//                donut: true,
+//                donutWidth: "6em",
+//                startAngle: 0,
+//
+//                total: saldo,
+//                showLabel: false
+//            });
+//            innerGauge.on("draw", function(data) {
+//                if(data.type === "slice") {
+//                    var pathLength = data.element._node.getTotalLength();
+//                    data.element.attr({
+//                        "stroke-dasharray": pathLength + "% " + pathLength + "%"
+//                    });
+//                    var animationDefinition = {
+//                        "stroke-dashoffset": {
+//                            id: "anim" + data.index,
+//                            dur: 3000,
+//                            from: -pathLength + "%",
+//                            to:  "0%",
+//                            easing: Chartist.Svg.Easing.easeOutQuint,
+//                            fill: "freeze"
+//                        }
+//                    };
+//                    if(data.index !== 0) {
+//                        animationDefinition["stroke-dashoffset"].begin = "anim" + (data.index - 1) + ".end";
+//                    }
+//                    data.element.attr({
+//                        "stroke-dashoffset": -pathLength + "%"
+//                    });
+//
+//                    data.element.animate(animationDefinition, false);
+//                }
+//            });
+//        };
+//        $("#productos").change(function(){
+//            getCategoryInfoSlide($("#productos option:selected").index());
+//        });
+//        getCategory();
+//        function numberToMonth(number){
+//            switch(number){
+//                case "01":
+//                    number = "ENE";
+//                    break;
+//                case "02":
+//                    number = "FEB";
+//                    break;
+//                case "03":
+//                    number = "MAR";
+//                    break;
+//                case "04":
+//                    number = "ABR";
+//                    break;
+//                case "05":
+//                    number = "MAY";
+//                    break;
+//                case "06":
+//                    number = "JUN";
+//                    break; 
+//                case "07":
+//                    number = "JUL";
+//                    break;
+//                case "08":
+//                    number = "AGO";
+//                    break;
+//                case "09":
+//                    number = "SEP";
+//                    break;
+//                case "10":
+//                    number = "OCT";
+//                    break;
+//                case "11":
+//                    number = "NOV";
+//                    break;
+//                case "12":
+//                    number = "DIC";
+//                    break;  
+//            }
+//            return number;
+//        };
+//        function round(number){
+//           return Math.ceil(number/100)*100
+//        }
 
     </script>
 </body>

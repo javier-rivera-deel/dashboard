@@ -1,6 +1,9 @@
 *{
 /*    background-color: rgba(0,0,0,0.15);*/
 }
+.hidden{
+    visibility: hidden;
+}
 
 *:focus {
     outline: none;
@@ -8,7 +11,7 @@
 }
 
 body {
-    background-color: white;
+    background-color: #746767;
     font-family: "Roboto", sans-serif;
     font-size: 1vh;
     color: white;
@@ -53,7 +56,7 @@ body {
 }
 
 .description {
-    font-size: 2.5vw;
+    font-size: 1.6em;
     text-align: right;
     white-space: nowrap;
     margin: 0 auto;
@@ -69,7 +72,7 @@ body {
     color: #DCECFC;
 }
 
-.saldo {
+.totalAmount {
     font-size: 3.3vh;
     text-align: right;
 }
@@ -135,7 +138,8 @@ body {
 }
 
 select {
-    width: 100%;
+    min-width: 85%;
+    max-width: 50%;
     font-size: 2.5em;
     padding: 0.2vh;
     margin: 0;
