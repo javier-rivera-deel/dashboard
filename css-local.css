@@ -1,0 +1,320 @@
+*{
+    background-color: rgba(0,0,0,0.15);
+}
+
+*:focus {
+    outline: none;
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+body {
+    background-color: white;
+    font-family: "Roboto", sans-serif;
+    font-size: 1vh;
+    color: white;
+    padding: 0px 2% 2% 3%;
+    transition: background 1s ease-in-out;
+}
+
+.arrow {
+    height: 10%;
+    padding-top: 3%;
+    vertical-align: middle;
+}
+
+.headerTitle {
+    vertical-align: middle;
+    padding-top: 3%;
+    padding-left: 5%
+}
+
+.vista-header {
+    height: 10%;
+}
+
+.vista-resumen {
+    height: 10%;
+}
+
+.vista-widget {
+    height: 30%;
+}
+
+.vista-grafica {
+    height: 50%;
+}
+
+.mainTitle {
+    font-size: 3vh;
+    font-weight: normal;
+}
+
+.titlePadding {
+    padding: 0.4vh;
+}
+
+.description {
+    font-size: 2.5vw;
+    text-align: right;
+    white-space: nowrap;
+    margin: 0 auto;
+    padding: 0 auto;
+}
+
+.descriptionProductos {
+    padding: 0;
+    height: 90%;
+}
+
+.lightBlueText {
+    color: #DCECFC;
+}
+
+.saldo {
+    font-size: 3.3vh;
+    text-align: right;
+}
+
+.graph-title {
+    height: 10%
+}
+
+.graph {
+    height: 90%;
+}
+
+.overlap {
+    position: absolute;
+}
+
+.ct-series-a .ct-slice-donut {
+    stroke: #fbfbfb;
+    stroke-linecap: round;
+}
+
+.upper {
+    -webkit-transform: scaleX(-1);
+}
+
+.upper-inside {
+    opacity: 0.5;
+}
+
+.opacity {
+    stroke-opacity: 0.5;
+}
+
+.toRight {
+    text-align: right;
+}
+
+.ct-series-a .ct-line {
+    stroke: white;
+    stroke-width: 0.7vh;
+}
+
+.ct-grid {
+    stroke: rgba(214, 214, 214, 0.6);
+    stroke-width: 0.1vw;
+    stroke-dasharray: 0;
+}
+
+.ct-label {
+    font-size: 1.5vh;
+    color: white;
+    text-transform: uppercase;
+    font-weight: normal;
+}
+
+.ct-area {
+    stroke: none;
+    fill-opacity: 0.3;
+}
+
+.ct-series-a .ct-area {
+    fill: white;
+}
+
+
+/*.ct-vertical{margin-left: -15vw;}*/
+
+select {
+    width: 100%;
+    font-size: 2.5em;
+    padding: 0.2vh;
+    margin: 0;
+    background-color: rgba(255, 255, 255, 0.01);
+    color: white;
+    text-transform: uppercase;
+    border: none;
+    outline: none;
+    font-family: "Open Sans", sans-serif;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+
+.selected {
+    font-family: "Open Sans", sans-serif;
+}
+
+#monto-tdc {
+    font-size: 2.1vh;
+    font-weight: bolder;
+    overflow: visible;
+}
+
+#monto-tdd {
+    font-size: 2.1vh;
+}
+
+.opacity-text {
+    opacity: 0.6;
+}
+
+.bottom {
+    position: absolute;
+    bottom: 0;
+    transform: translateX(-15%)
+}
+
+.montosDisplay {
+    padding: 0 auto;
+}
+
+.ct-square>svg {
+    overflow: visible;
+}
+
+h2 {
+    font-weight: bold;
+    font-size: 2.5vw;
+    white-space: nowrap;
+    margin: 0;
+    padding: 0;
+}
+
+.noPadding {
+    padding: 0;
+}
+
+.noMargin {
+    margin: 0;
+}
+
+h4 {
+    font-size: 370%;
+    white-space: nowrap;
+    margin: 0;
+    padding: 0;
+}
+
+.inline {
+    display: inline-block
+}
+
+.oneMonth {
+    padding-top: 3%;
+    margin-left: 45%;
+}
+
+.textRight {
+    text-align: right;
+}
+
+.center-text {
+    text-align: center;
+}
+
+.caretStyle {
+    height: 50%
+}
+
+.redback {
+    background-color: indianred
+}
+
+.greenback {
+    background-color: forestgreen
+}
+
+.blueback {
+    background-color: darkblue
+}
+
+.blackback {
+    background-color: black
+}
+
+.absolute {
+    position: absolute
+}
+
+.myclass {
+    margin: 0 auto;
+    height: 100%;
+    width: 100%;
+}
+
+.opa {
+    opacity: 0.3
+}
+
+img.center {
+    margin-left: auto;
+    margin-right: auto;
+    top: 30%;
+    left: 0;
+    right: 0;
+    height: 12vh;
+}
+
+.center-adjust {
+    margin-left: auto;
+    margin-right: auto;
+    top: 30%;
+    left: 0;
+    right: 0;
+    height: 9vh;
+}
+
+.center {
+    margin-left: auto;
+    margin-right: auto;
+    left: 0;
+    right: 0;
+}
+
+.relative {
+    position: relative
+}
+
+h1 {
+    color: black
+}
+
+.slider {
+    z-index: 2;
+}
+
+.floatRight {
+    float: right;
+}
+
+.se-pre-con {
+    position: fixed;
+    left: 0px;
+    top: 0px;
+    width: 100%;
+    height: 100%;
+    z-index: 9999;
+    background: url(/*SPINNER*/) center no-repeat #fff;
+    background-size: 20%;
+}
+
+fix-flecha {
+    /* position: relative;
+   left:70%;
+   width: auto;
+   height: 70%;*/
+}

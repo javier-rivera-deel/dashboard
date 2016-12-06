@@ -1,0 +1,477 @@
+<html>
+<script src="respuesta-jerodriguez.js"></script>
+<head>
+
+    <meta charset="UTF-8">
+    <title>dash</title>
+
+    <!--BOOTSTRAP-->
+    <link rel="stylesheet" href="lib/bootstrap-3.3.6/dist/css/bootstrap.css">
+    <!--CHARTIST_CSS-->
+    <link rel="stylesheet" href="lib/chartistjs/chartist.min.css">
+    <!--SLICK_CSS-->
+    <link rel="stylesheet" href="lib/slick-1.6.0/slick/slick.css">
+    <!--SLICK__THEME_CSS-->
+    <link rel="stylesheet" href="lib/slick-1.6.0/slick/slick-theme.css">
+    
+    <link rel="stylesheet" href="css-local.css">
+
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300" rel="stylesheet">
+
+</head>
+
+
+<body>
+   
+    <div class="container-fluid">
+        <div class="row noPadding">
+            <div class="col-xs-12 vista-header noPadding">  
+                <img  id="backArrow" class="inline arrow" src="img/back-android.png">
+                <h4 class="inline headerTitle">Detalle por Rubro</h4>
+                <h3 id="categoria-slide"></h3>
+            </div>
+        </div>
+        <div class="row vista-resumen">
+            <div class="col-xs-7">
+                <div class="row">
+                    <div class="noPadding col-xs-12">
+                        <select class="absolute inline" name="" id="productos">
+                        </select>
+                        <img class="caretStyle fix-flecha" src="img/arrow_select.png">
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-5">
+                <div class="row">
+                    <div id="fecha" class="col-xs-12 description lightBlueText">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12 saldo"></div>
+                </div>
+            </div>
+        </div>
+        <div class="row vista-widget">
+            <div class="col-xs-3 descriptionProductos textRight">    
+                <h2 class="textRight" id="tdc-label"></h2>
+                <div class="col-xs-12 montosDisplay noPadding textRight" id="monto-tdc"></div>  
+            </div>
+
+            <!--PIEZA CENTRAL-->
+
+            <!--CONTENEDOR-->
+            <div class="col-xs-6 descriptionProductos text-center middle red">
+
+                <!--SEPARADOR-->
+                <div class="col-xs-12 myClass">
+
+                    <!--myClass CENTRA EL DIV EN EL COL-->
+                    <div class="myclass">
+                        <div class=" slider col-xs-12">
+                        </div>
+
+                        <!--IMAGEN ICONO-->
+                        <!-- <img id="icon-place" class="center img-responsive absolute" src="" alt="">-->
+                        <!--FIN IMAGEN ICONO-->
+
+                        <!--DONA EXTERIOR-->
+                        <div class="upper absolute center" id="ct-gauge"></div>
+                        <!--FIN DONA EXTERIOR-->
+
+                        <!--DONA INTERIOR-->
+                        <div class="upper-inside absolute  opacity center" id="ct-gauge-small"></div>
+                        <!--FIN DONA INTERIOR-->  
+                    </div>
+                    <!--FIN myClass--> 
+
+                </div>
+                <!--FIN SEPARADOR-->
+                
+            </div>
+            <!--FIN PIEZA CENTRAL-->
+
+            <div class="col-xs-3 descriptionProductos opacity-text right noPadding">
+                <div class="bottom">
+                    <h2 id="tdd-label"></h2>
+                    <div class="col-xs-12 montosDisplay noPadding" id="monto-tdd"></div>
+                </div>
+            </div>
+        </div>
+        <div class="row vista-grafica">
+            <div class="col-xs-12 titlePadding mainTitle graph-title" id="resumen">
+            </div>
+            <div class="col-xs-12 ct-chart ct-square graph">
+            </div>
+        </div>
+    </div>
+
+    
+    <!--JQUERY-->
+     <script src="https://code.jquery.com/jquery-3.1.1.js" integrity="sha256-16cdPddA6VdVInumRGo6IbivbERE8p7CQR3HzTBuELA=" crossorigin="anonymous"></script>
+    <!--CHARTIST_JS-->
+    <script src="lib/chartistjs/chartist.min.js"></script>
+    <!--SLICK-->
+    <script src="lib/slick-1.6.0/slick/slick.min.js"></script>
+    <script src="modulo.js"></script>
+
+    <script>	  
+      function sortData (data){
+        for(var i in data){
+          if (data[i].categoria == "OTROS"){
+              var aux = data[data.length-1];
+              data[data.length-1] = data[i];
+              data[i] = aux;
+              break;
+          }
+        }
+        dataEnd = data[data.length-1];
+        dataAux = data.splice(0,data.length-1);
+        dataAux.sort(function(a, b){return b.saldo.valor-a.saldo.valor;});
+        dataAux.push(dataEnd);
+        data = dataAux;
+        return data;
+      }
+      if(respuesta.length > 0){
+        respuesta = sortData(respuesta);
+      };
+      
+        $(document).ready(function(){
+            slider = $(".slider").slick({
+                arrows: false,
+                dots: false,
+            });
+            if(respuesta.length > 0){
+                getCategoryInfoSlide(0);
+            }
+            else{
+                $("#icon-place").remove();
+                $("#productos").remove();
+                $("#resumen").text("No existen datos asociados.").addClass("center-text");
+            }
+        });
+        
+        $(".slider").on("beforeChange", function(event, slick, currentSlide, nextSlide){
+            getCategoryInfoSlide(nextSlide);
+        });
+        
+        function mobileInfo(JSONBUFFER) {
+            var strMessage = JSON.stringify(JSONBUFFER);
+            if (window.webkit && window.webkit.messageHandlers) webkit.messageHandlers.initApp.postMessage(strMessage);
+            else if (window.external && typeof window.external.notify == "unknown") window.external.notify(strMessage);
+            else {
+                console.log(strMessage);
+                Android.proxyJavascript(strMessage);
+            }
+        };
+       
+        $("#backArrow").click(function() {
+            var obj = {
+                "event": "click",
+                "target": targetVar,
+                "action": "Volver"
+            };
+            var strObj = JSON.stringify(obj);
+            mobileInfo(obj);
+        });
+        
+        var categorySelected = $("#productos option:selected").text();
+        
+        function getCategory(){
+            /*MANEJO DE ERRORES TEMPORAL*/
+            if(respuesta.length == 0){
+                $("#icon-place").remove();
+                $("#productos").remove();
+                $("#resumen").text("No existen datos asociados.").addClass("center-text");
+            }
+            else{
+                $.each(respuesta,function(key) 
+                   {
+                    var categoria = respuesta[key].categoria;
+                    var imgurl = respuesta[key].imagen;
+                    option = document.createElement("option");
+                    $(option).addClass("selected")
+                        .attr("categoria",categoria)
+                        .text(categoria)
+                        .appendTo("#productos");
+
+                    imageContainer = document.createElement("div");
+                    imageIcon = document.createElement("img");
+                    $(imageIcon).appendTo(imageContainer)
+                        .attr({"id":"icon-place","src": imgurl, "categoria": categoria})
+                        .addClass("center-adjust relative img-responsive");
+                    $(imageContainer).appendTo($(".slider"));
+
+                });
+            }
+        };
+        function getMaxOfArray(numArray) {
+              return Math.max.apply(null, numArray);
+            }
+
+        function getCategoryInfoSlide(index){
+            var category = respuesta[index];
+
+            $(".slider").slick("slickGoTo",index,false);
+            
+            var montoDebito = parseFloat(category.montoDebito.valor);
+            var montoCredito = parseFloat(category.montoCredito.valor);
+            var saldo = parseFloat(category.saldo.valor);         
+            var percentageCredito = (montoCredito * 100) / saldo;
+            var percentageDebito = (montoDebito * 100) / saldo;
+
+            switch ((category.categoria).toUpperCase()) {
+                case "HOGAR":
+                    var color = "1988BD";
+                    /*HOGAR*/
+                    var categoria = (category.categoria).toUpperCase();
+                    break;
+                case "INDUMENTARIA":
+                    var color = "93278F";
+                    /*INDUMENTARIA*/
+                    var categoria = (category.categoria).toUpperCase();
+                    break;
+                case "AUTOMOVIL":
+                    var color = "F4162A";
+                    /*AUTOMOVIL*/
+                    var categoria = (category.categoria).toUpperCase();
+                    break;
+                case "GASTRONOMIA":
+                    var color = "F68837";
+                    /*GASTRONOMIA*/
+                    var categoria = (category.categoria).toUpperCase();
+                    break;
+                case "TURISMO":
+                    var color = "1fa76b";
+                    /*TURISMO*/
+                    var categoria = (category.categoria).toUpperCase();
+                    break;
+                case "OTROS":
+                    var color = "2C4E8E";
+                    /*OTROS*/
+                    var categoria = (category.categoria).toUpperCase();
+                    break;
+                case "SUPERMERCADOS":
+                    var color = "569852";
+                    /*SUPERMERCADOS*/
+                    var categoria = (category.categoria).toUpperCase();
+                    break;
+                default:
+                    var color = "1988BD";
+                    /*OTROS*/
+                    var categoria = (category.categoria).toUpperCase();
+            }
+           /* $("#productos option:selected").val(index);*/
+            $("#productos").prop("selectedIndex", index); 
+          
+          var error = false;
+            if(category.hasOwnProperty("error")){
+                  $("#resumen").text(category.error);
+                  error = true;
+              }
+            if(!error)
+             $("#resumen").text("Resumen Comparativo Histórico");
+            
+            if(category.sumaHistorico <= 0){
+                $("#icon-place").remove();
+                $("#productos").remove();
+                $("#resumen").text("No hay consumo").addClass("center-text");
+            };
+          
+            $("body").css("background-color","#"+color);
+            $("#tdc-label").text("TARJETA DE CRÉDITO");   
+            $("#tdd-label").text("TARJETA DE DÉBITO");  
+            $(".saldo").text(category.moneda+" "+category.saldo.formateado);
+            $("#monto-tdd").text(category.moneda+" "+category.montoDebito.formateado);
+            $("#monto-tdc").text(category.moneda+" "+category.montoCredito.formateado);
+            $("#fecha").text(category.fecha);
+
+            var datosHistorio = Array();
+            datosHistorio = category.historico;
+            if(datosHistorio.length > 12)
+            {
+                datosHistorio = datosHistorio.slice(Math.max(datosHistorio.length - 12));
+            }
+            var arrayLabel = Array();
+            var arrayValor = Array();
+
+            $.each(datosHistorio, function(pos){
+                arrayLabel[pos] = numberToMonth(datosHistorio[pos].mes) +" "+ datosHistorio[pos].anio;
+                arrayValor[pos] = parseFloat(datosHistorio[pos].importe.valor);
+            });
+            /*var reg = new RegExp("(\d)(?=(\d{3})+(?!\d))","g");*/
+            var maxVal = getMaxOfArray(arrayValor);
+
+            /*SI EL RUBRO TRAE UN SOLO VALOR, SE AÑANE SALDO*/
+            if(parseFloat(datosHistorio[0].importe.valor) > saldo){
+                arrayValor.unshift(saldo);
+            }
+            else{
+                arrayValor.unshift(parseFloat(datosHistorio[0].importe.valor));
+            }
+		  
+		 
+
+            var chart = new Chartist.Line(".ct-chart", {
+                labels: arrayLabel,
+                series: [arrayValor]
+            },{
+                showPoint: false,
+                divisor: 2,
+                showArea: true,
+                lineSmooth: Chartist.Interpolation.simple({
+                    tension: 3
+                }),
+                axisX: {
+                   /* onlyInteger:true*/
+                },
+                axisY:{
+                    position: "end",
+                    type: Chartist.FixedScaleAxis,
+                    ticks: [Math.round((maxVal * 20)/100),Math.round((maxVal * 40)/100),Math.round((maxVal * 60)/100),Math.round((maxVal * 80)/100),Math.round(maxVal)],
+                    high: Math.round(maxVal), 
+                    low: 0,
+                    onlyInteger: true,
+                    labelInterpolationFnc: function(value, index) {
+                        return category.moneda +value.toString().replace(/./g, function(c, i, a)
+                                                                            {return i && c !== "," && ((a.length - i) % 3 === 0) ? "." + c : c;});
+                    },
+                }/*PADDING*/
+            });
+            chart.on("draw", function(data) {
+                if(data.type === "line" || data.type === "area") {
+                    data.element.animate({
+                        d: {
+                            begin: 2000 * data.index,
+                            dur: 4000,
+                            from: data.path.clone().scale(1, 0).translate(0, data.chartRect.height()).stringify(),
+                            to: data.path.clone().stringify(),
+                            easing: Chartist.Svg.Easing.easeOutQuint
+                        }
+                    });
+                }
+            });
+            if(montoCredito > 0){}else{montoCredito = ""};
+            var outergauge = new Chartist.Pie("#ct-gauge", {
+                series: [montoCredito]
+            },{
+                donut: true,
+                donutWidth: "6em",
+                startAngle: 0,
+                total: saldo,
+                showLabel: false
+            });
+            outergauge.on("draw", function(data) {
+                if(data.type === "slice") {
+                    var pathLength = data.element._node.getTotalLength();
+                    data.element.attr({
+                        "stroke-dasharray": pathLength + "% " + pathLength + "%"
+                    });
+                    var animationDefinition = {
+                        "stroke-dashoffset": {
+                            id: "anim" + data.index,
+                            dur: 2500,
+                            from: -pathLength + "%",
+                            to:  "0%",
+                            easing: Chartist.Svg.Easing.easeOutQuint,            
+                            fill: "freeze"
+                        }
+                    };
+                    data.element.animate(animationDefinition, false);
+                }
+            });
+          if(montoDebito > 0){}else{montoDebito = ""};
+            var innerGauge  = new Chartist.Pie("#ct-gauge-small", {
+                series: [montoDebito]
+            },{
+                chartPadding: 19,
+                donut: true,
+                donutWidth: "6em",
+                startAngle: 0,
+
+                total: saldo,
+                showLabel: false
+            });
+            innerGauge.on("draw", function(data) {
+                if(data.type === "slice") {
+                    var pathLength = data.element._node.getTotalLength();
+                    data.element.attr({
+                        "stroke-dasharray": pathLength + "% " + pathLength + "%"
+                    });
+                    var animationDefinition = {
+                        "stroke-dashoffset": {
+                            id: "anim" + data.index,
+                            dur: 3000,
+                            from: -pathLength + "%",
+                            to:  "0%",
+                            easing: Chartist.Svg.Easing.easeOutQuint,
+                            fill: "freeze"
+                        }
+                    };
+                    if(data.index !== 0) {
+                        animationDefinition["stroke-dashoffset"].begin = "anim" + (data.index - 1) + ".end";
+                    }
+                    data.element.attr({
+                        "stroke-dashoffset": -pathLength + "%"
+                    });
+
+                    data.element.animate(animationDefinition, false);
+                }
+            });
+        };
+
+        $("#productos").change(function(){
+            getCategoryInfoSlide($("#productos option:selected").index());
+        });
+
+        getCategory();
+
+        function numberToMonth(number){
+            switch(number){
+                case "01":
+                    number = "ENE";
+                    break;
+                case "02":
+                    number = "FEB";
+                    break;
+                case "03":
+                    number = "MAR";
+                    break;
+                case "04":
+                    number = "ABR";
+                    break;
+                case "05":
+                    number = "MAY";
+                    break;
+                case "06":
+                    number = "JUN";
+                    break; 
+                case "07":
+                    number = "JUL";
+                    break;
+                case "08":
+                    number = "AGO";
+                    break;
+                case "09":
+                    number = "SEP";
+                    break;
+                case "10":
+                    number = "OCT";
+                    break;
+                case "11":
+                    number = "NOV";
+                    break;
+                case "12":
+                    number = "DIC";
+                    break;  
+            }
+            return number;
+        };
+        
+        function round(number){
+           return Math.ceil(number/100)*100
+        }
+
+    </script>
+</body>
+</html>
