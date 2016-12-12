@@ -11,12 +11,13 @@
                 this.error();
             }
             this.bindEvents();
-            
         },
         cacheElements: function () {
+            this.$body = $("body");
             this.$mainBody = $("#main-screen");
             this.$category = document.getElementById('category');
             this.$totalAmaount = document.getElementById('totalAmaount');
+            this.$imagenIcon =  $("#icon-place");
             this.$select = $('#categories-select');
             this.template = $('#categories-list').html();
             this.$imageIcon = $("#icon-place");
@@ -24,6 +25,7 @@
             this.$montoCredito = $("#monto-tdc");
             this.$fecha = $("#fecha");
             this.$saldo = $("#saldo");
+            
         },
         render:function(){
             var data = {
@@ -37,11 +39,12 @@
             this.$mainBody.addClass("hidden");
         },
         bindEvents:function(){
-            this.$select.change(this.setCategory);
+            this.$select.change(this.setCategory.bind(this));
         },
         setCategory:function(){
             this.categoryIndex = $('#categories-select option:selected').index();
-            $("#icon-place").attr("src",respuesta[this.categoryIndex].imagen);
+            this.$body.css("background-color",respuesta[this.categoryIndex].color);
+            this.$imagenIcon.attr("src",respuesta[this.categoryIndex].imagen);
             this.$montoCredito.text(respuesta[this.categoryIndex].montoCredito.formateado);
             this.$montoDebito.text(respuesta[this.categoryIndex].montoDebito.formateado);
             this.$fecha.text(respuesta[this.categoryIndex].fecha);
