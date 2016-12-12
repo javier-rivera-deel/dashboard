@@ -22,6 +22,8 @@
             this.$imageIcon = $("#icon-place");
             this.$montoDebito = $("#monto-tdd");
             this.$montoCredito = $("#monto-tdc");
+            this.$fecha = $("#fecha");
+            this.$saldo = $("#saldo");
         },
         render:function(){
             var data = {
@@ -42,6 +44,8 @@
             $("#icon-place").attr("src",respuesta[this.categoryIndex].imagen);
             this.$montoCredito.text(respuesta[this.categoryIndex].montoCredito.formateado);
             this.$montoDebito.text(respuesta[this.categoryIndex].montoDebito.formateado);
+            this.$fecha.text(respuesta[this.categoryIndex].fecha);
+            this.$saldo.text(respuesta[this.categoryIndex].saldo.formateado);
         },
     }; 
     dashboard.init();
