@@ -5,6 +5,7 @@
             //sortData(respuesta);
             this.cacheElements();
             this.render();
+            this.bindEvents();
         },
         cacheElements: function () {
             this.$category = document.getElementById('category');
@@ -17,6 +18,11 @@
                 categories : this.categories
             };
             this.$select.html(Mustache.render(this.template,data)); 
+        },
+        bindEvents:function(){
+            this.$select.change(function(){
+                console.log("select item changed");
+            })
         }
     }; 
     dashboard.init();

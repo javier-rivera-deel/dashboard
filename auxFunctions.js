@@ -8,4 +8,4 @@ var auxFunctions = {
     });
     return subArray;
     }
-}
+}// end of object
