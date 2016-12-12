@@ -6,6 +6,7 @@
             this.cacheElements();
             this.render();
             this.bindEvents();
+            this.getCategory();
         },
         cacheElements: function () {
             this.$category = document.getElementById('category');
@@ -20,9 +21,11 @@
             this.$select.html(Mustache.render(this.template,data)); 
         },
         bindEvents:function(){
-            this.$select.change(function(){
-                console.log("select item changed");
-            })
+            this.$select.change(this.getCategory);
+        },
+        getCategory:function(){
+            this.$categorySelected = $('#categories-select option:selected').index();
+            console.log(this.$categorySelected);
         }
     }; 
     dashboard.init();
