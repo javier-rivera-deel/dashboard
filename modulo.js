@@ -6,13 +6,14 @@
             this.cacheElements();
             this.render();
             this.bindEvents();
-            this.getCategory();
+            this.setCategory();
         },
         cacheElements: function () {
             this.$category = document.getElementById('category');
             this.$totalAmaount = document.getElementById('totalAmaount');
             this.$select = $('#categories-select');
             this.template = $('#categories-list').html();
+            this.$imageIcon = $("#icon-place");
         },
         render:function(){
             var data = {
@@ -21,12 +22,13 @@
             this.$select.html(Mustache.render(this.template,data)); 
         },
         bindEvents:function(){
-            this.$select.change(this.getCategory);
+            this.$select.change(this.setCategory);
         },
-        getCategory:function(){
-            this.$categorySelected = $('#categories-select option:selected').index();
-            console.log(this.$categorySelected);
-        }
+        setCategory:function(){
+            //console.log(this.$imageIcon);
+            this.categoryIndex = $('#categories-select option:selected').index();
+            $("#icon-place").attr("src",respuesta[this.categoryIndex].imagen);
+        },
     }; 
     dashboard.init();
 })();
