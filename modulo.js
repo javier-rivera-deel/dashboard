@@ -1,6 +1,6 @@
 (function(){
     var dashboard = {
-        categories : subArray(respuesta),
+        categories : auxFunctions.subArray(respuesta),
         init: function () {
             //sortData(respuesta);
             this.cacheElements();
