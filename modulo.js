@@ -25,7 +25,6 @@
             this.$montoCredito = $("#monto-tdc");
             this.$fecha = $("#fecha");
             this.$saldo = $("#saldo");
-            
         },
         render:function(){
             var data = {
@@ -49,6 +48,12 @@
             this.$montoDebito.text(respuesta[this.categoryIndex].montoDebito.formateado);
             this.$fecha.text(respuesta[this.categoryIndex].fecha);
             this.$saldo.text(respuesta[this.categoryIndex].saldo.formateado);
+            graph.renderCenterDonut(
+                respuesta[this.categoryIndex].montoDebito.valor,
+                respuesta[this.categoryIndex].saldo.valor);
+            graph.renderInnerDonut(
+                respuesta[this.categoryIndex].montoCredito.valor,
+                respuesta[this.categoryIndex].saldo.valor);
         },
     }; 
     dashboard.init();

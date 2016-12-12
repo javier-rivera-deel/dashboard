@@ -5,7 +5,7 @@ var respuesta = [
         "color": "#F4162A",
         "imagen": "img/automovil-01.png",
         "saldo": {
-            "valor": 961.66,
+            "valor": 1300.66,
             "formateado": "961,66"
         },
         "montoDebito": {
@@ -13,8 +13,8 @@ var respuesta = [
             "formateado": "961,66"
         },
         "montoCredito": {
-            "valor": 0,
-            "formateado": "0,00"
+            "valor": 300,
+            "formateado": "300,00"
         },
         "moneda": "$",
         "historico": [
