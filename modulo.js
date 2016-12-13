@@ -61,7 +61,6 @@
                     auxFunctions.valoresHistoricos(respuesta[this.categoryIndex].historico).max);
             }
         },
-        someprop:function(){}
     };
     dashboard.init();
 })();
