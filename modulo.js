@@ -42,23 +42,24 @@
         },
         setCategory: function () {
             this.categoryIndex = $('#categories-select option:selected').index();
+            this.category = respuesta[this.categoryIndex];
             this.$body.css("background-color", respuesta[this.categoryIndex].color);
-            this.$imagenIcon.attr("src", respuesta[this.categoryIndex].imagen);
-            this.$montoCredito.text(respuesta[this.categoryIndex].montoCredito.formateado);
-            this.$montoDebito.text(respuesta[this.categoryIndex].montoDebito.formateado);
-            this.$fecha.text(respuesta[this.categoryIndex].fecha);
-            this.$saldo.text(respuesta[this.categoryIndex].saldo.formateado);
+            this.$imagenIcon.attr("src", this.category.imagen);
+            this.$montoCredito.text(this.category.montoCredito.formateado);
+            this.$montoDebito.text(this.category.montoDebito.formateado);
+            this.$fecha.text(this.category.fecha);
+            this.$saldo.text(this.category.saldo.formateado);
             if (this.$montoCredito && this.$montoDebito) {
                 graph.renderCenterDonut(
-                    respuesta[this.categoryIndex].montoDebito.valor,
-                    respuesta[this.categoryIndex].saldo.valor);
+                    this.category.montoDebito.valor,
+                    this.category.saldo.valor);
                 graph.renderInnerDonut(
-                    respuesta[this.categoryIndex].montoCredito.valor,
-                    respuesta[this.categoryIndex].saldo.valor);
+                    this.category.montoCredito.valor,
+                    this.category.saldo.valor);
                 graph.renderHistoryGraph(
-                    auxFunctions.valoresHistoricos(respuesta[this.categoryIndex].historico).meses,
-                    auxFunctions.valoresHistoricos(respuesta[this.categoryIndex].historico).valoresMensuales,
-                    auxFunctions.valoresHistoricos(respuesta[this.categoryIndex].historico).max);
+                    auxFunctions.valoresHistoricos(this.category.historico).meses,
+                    auxFunctions.valoresHistoricos(this.category.historico).valoresMensuales,
+                    auxFunctions.valoresHistoricos(this.category.historico).max);
             }
         },
     };
