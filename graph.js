@@ -4,7 +4,7 @@ var graph = {
             series: [monto]
         }, {
             donut: true,
-            donutWidth: "6em",
+            donutWidth: 6,
             startAngle: 0,
             total: total,
             showLabel: false
@@ -35,7 +35,7 @@ var graph = {
         }, {
             chartPadding: 19,
             donut: true,
-            donutWidth: "6em",
+            donutWidth: 6,
             startAngle: 0,
             total: total,
             showLabel: false
@@ -67,7 +67,35 @@ var graph = {
             }
         });
     },
-    renderHistoryGraph:function(){
-        
+    renderHistoryGraph: function (labels, values, maxVal) {
+        var chart = new Chartist.Line(".ct-chart", {
+            labels: labels,
+            series: [values]
+        }, {
+            showPoint: false,
+            divisor: 2,
+            showArea: true,
+            lineSmooth: Chartist.Interpolation.simple({
+                tension: 3
+            }),
+            axisX: {
+                /* onlyInteger:true*/
+            },
+            axisY: {
+                position: "end",
+                type: Chartist.FixedScaleAxis,
+                ticks: [Math.round((maxVal * 20) / 100), Math.round((maxVal * 40) / 100), Math.round((maxVal * 60) / 100), Math.round((maxVal * 80) / 100), Math.round(maxVal)],
+                high: Math.round(maxVal),
+                low: 0,
+                onlyInteger: true/*,
+                labelInterpolationFnc: function (value, index) {
+                    return category.moneda + value.toString().replace(/./g, function (c, i, a) {
+                        return i && c !== "," && ((a.length - i) % 3 === 0) ? "." + c : c;
+                    });
+                },*/
+            } /*PADDING*/
+        });
     }
-};
+   };
+
+//maxVal

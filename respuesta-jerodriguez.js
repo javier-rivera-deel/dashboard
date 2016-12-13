@@ -124,15 +124,15 @@ var respuesta = [
         "color": "#93278F",
         "imagen": "img/indumentaria-01.png",
         "saldo": {
-            "valor": 0,
+            "valor": 0.00,
             "formateado": "0,00"
         },
         "montoDebito": {
-            "valor": 0,
+            "valor": 0.00,
             "formateado": "0,00"
         },
         "montoCredito": {
-            "valor": 0,
+            "valor": 0.00,
             "formateado": "0,00"
         },
         "moneda": "$",
