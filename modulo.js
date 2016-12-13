@@ -15,6 +15,7 @@
         cacheElements: function () {
             this.$body = $("body");
             this.$mainBody = $("#main-screen");
+            this.$errorScreen = $("#error-screen");
             this.$category = document.getElementById('category');
             this.$totalAmaount = document.getElementById('totalAmaount');
             this.$imagenIcon = $("#icon-place");
@@ -36,6 +37,7 @@
         error: function () {
             console.log(this.$mainBody);
             this.$mainBody.addClass("hidden");
+            this.$errorScreen.removeClass("hidden");
         },
         bindEvents: function () {
             this.$select.change(this.setCategory.bind(this));

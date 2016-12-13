@@ -136,7 +136,9 @@ body {
 .ct-series-a .ct-area {
     fill: white;
 }
-
+#error-screen{
+    background-color: darkslategray;
+}
 select {
     min-width: 85%;
     max-width: 50%;
