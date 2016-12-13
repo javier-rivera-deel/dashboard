@@ -60,7 +60,6 @@
                     auxFunctions.valoresHistoricos(respuesta[this.categoryIndex].historico).valoresMensuales,
                     auxFunctions.valoresHistoricos(respuesta[this.categoryIndex].historico).max);
             }
-
         },
     };
     dashboard.init();

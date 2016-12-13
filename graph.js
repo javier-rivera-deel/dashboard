@@ -67,7 +67,7 @@ var graph = {
             }
         });
     },
-    renderHistoryGraph: function (labels, values, maxVal) {
+    renderHistoryGraph: function (labels, values, maxVal){
         var chart = new Chartist.Line(".ct-chart", {
             labels: labels,
             series: [values]
@@ -110,5 +110,3 @@ var graph = {
             });
     }
    };
-
-//maxVal
