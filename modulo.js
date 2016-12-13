@@ -3,7 +3,7 @@
     var dashboard = {
         categories: auxFunctions.subArray(respuesta),
         init: function () {
-            //sortData(respuesta);
+            //sortData(respuesta);/*testing commit*/
             this.cacheElements();
             if (respuesta.length > 0) {
                 this.render();
