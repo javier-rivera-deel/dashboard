@@ -3,7 +3,7 @@
     var dashboard = {
         categories: auxFunctions.subArray(respuesta),
         init: function () {
-            //sortData(respuesta);/*testing commit*/
+            respuesta = auxFunctions.sortData(respuesta);
             this.cacheElements();
             if (respuesta.length > 0) {
                 this.render();
@@ -46,12 +46,13 @@
             this.categoryIndex = $('#categories-select option:selected').index();
             this.category = respuesta[this.categoryIndex];
             this.$body.css("background-color", respuesta[this.categoryIndex].color);
-            this.$imagenIcon.attr("src", this.category.imagen);
-            this.$montoCredito.text(this.category.montoCredito.formateado);
-            this.$montoDebito.text(this.category.montoDebito.formateado);
-            this.$fecha.text(this.category.fecha);
-            this.$saldo.text(this.category.saldo.formateado);
             this.currency = this.category.moneda;
+            this.$imagenIcon.attr("src", this.category.imagen);
+            this.$montoCredito.text(this.currency+" "+this.category.montoCredito.formateado);
+            this.$montoDebito.text(this.currency+" "+this.category.montoDebito.formateado);
+            this.$fecha.text(this.category.fecha);
+            this.$saldo.text(this.currency+" "+this.category.saldo.formateado);
+            
             if (this.$montoCredito && this.$montoDebito) {
                 graph.renderCenterDonut(
                     this.category.montoDebito.valor,
@@ -60,7 +61,6 @@
                     this.category.montoCredito.valor,
                     this.category.saldo.valor);
                 this.$graphValues =  auxFunctions.valoresHistoricos(this.category.historico);
-                //console.log(this.$graphValues);
                 graph.renderHistoryGraph(
                     this.$graphValues.meses,
                     this.$graphValues.valoresMensuales,

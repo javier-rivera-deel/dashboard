@@ -1,4 +1,4 @@
-function sortData(data) {
+function sortData(data){
     var dataEnd;
     var dataAux;
     for (var i in data) {
