@@ -67,7 +67,7 @@ var graph = {
             }
         });
     },
-    renderHistoryGraph: function (labels, values, maxVal){
+    renderHistoryGraph: function (labels, values, maxVal,currency){
         var chart = new Chartist.Line(".ct-chart", {
             labels: labels,
             series: [values]
@@ -87,12 +87,12 @@ var graph = {
                 ticks: [Math.round((maxVal * 20) / 100), Math.round((maxVal * 40) / 100), Math.round((maxVal * 60) / 100), Math.round((maxVal * 80) / 100), Math.round(maxVal)],
                 high: Math.round(maxVal),
                 low: 0,
-                onlyInteger: true/*,
+                onlyInteger: true,
                 labelInterpolationFnc: function (value, index) {
-                    return category.moneda + value.toString().replace(/./g, function (c, i, a) {
+                    return currency + value.toString().replace(/./g, function (c, i, a) {
                         return i && c !== "," && ((a.length - i) % 3 === 0) ? "." + c : c;
                     });
-                },*/
+                },
             } /*PADDING*/
         });
         chart.on("draw", function(data) {

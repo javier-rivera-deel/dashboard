@@ -23,7 +23,8 @@ var auxFunctions = {
             meses[pos] = labels[parseFloat(historico[pos].mes) - 1] + " " + historico[pos].anio;
             valoresMensuales[pos] = historico[pos].importe.valor;
         });
-        console.log(valoresMensuales.length);
+        valoresMensuales.unshift(historico[0].importe.valor);
+        //console.log(valoresMensuales.length);
         return {
             valoresMensuales: valoresMensuales,
             meses: meses,

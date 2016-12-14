@@ -51,6 +51,7 @@
             this.$montoDebito.text(this.category.montoDebito.formateado);
             this.$fecha.text(this.category.fecha);
             this.$saldo.text(this.category.saldo.formateado);
+            this.currency = this.category.moneda;
             if (this.$montoCredito && this.$montoDebito) {
                 graph.renderCenterDonut(
                     this.category.montoDebito.valor,
@@ -63,7 +64,8 @@
                 graph.renderHistoryGraph(
                     this.$graphValues.meses,
                     this.$graphValues.valoresMensuales,
-                    this.$graphValues.max);
+                    this.$graphValues.max,
+                    this.currency);
             }
         },
     };
