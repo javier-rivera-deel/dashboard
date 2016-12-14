@@ -58,10 +58,12 @@
                 graph.renderInnerDonut(
                     this.category.montoCredito.valor,
                     this.category.saldo.valor);
+                this.$graphValues =  auxFunctions.valoresHistoricos(this.category.historico);
+                //console.log(this.$graphValues);
                 graph.renderHistoryGraph(
-                    auxFunctions.valoresHistoricos(this.category.historico).meses,
-                    auxFunctions.valoresHistoricos(this.category.historico).valoresMensuales,
-                    auxFunctions.valoresHistoricos(this.category.historico).max);
+                    this.$graphValues.meses,
+                    this.$graphValues.valoresMensuales,
+                    this.$graphValues.max);
             }
         },
     };
