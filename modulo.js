@@ -1,19 +1,16 @@
 (function () {
     //respuesta.length = 0;
     var dashboard = {
-        categories: auxFunctions.subArray(respuesta),
         init: function () {
-            
-            respuesta = auxFunctions.sortData(respuesta);
-            auxFunctions.printImgEl(auxFunctions.subArrayImg(respuesta));
+            this.respuesta = auxFunctions.sortData(respuesta);
+            this.categories = auxFunctions.subArray(this.respuesta),
+            auxFunctions.printImgEl(auxFunctions.subArrayImg(this.respuesta));
             this.slider = $(".slider").slick({
                 arrows: false,
                 dots: false,
             });
-            
-            //$(".slider").slick("slickGoTo",0,false);
             this.cacheElements();
-            if (respuesta.length > 0) {
+            if (this.respuesta.length > 0) {
                 this.render();
             } else {
                 this.error();
@@ -50,6 +47,7 @@
             this.$errorScreen.removeClass("hidden");
         },
         bindEvents: function () {
+            
             this.$select.change(this.setCategory.bind(this));
             /* $(".slider").on("beforeChange", function(event, slick, currentSlide, nextSlide){
                 getCategoryInfoSlide(nextSlide);
@@ -57,8 +55,10 @@
         },
         setCategory: function () {
             this.categoryIndex = $('#categories-select option:selected').index();
-            this.category = respuesta[this.categoryIndex];
-            this.$body.css("background-color", respuesta[this.categoryIndex].color);
+            
+            this.category = this.respuesta[this.categoryIndex];
+            $(".slider").slick("slickGoTo",this.categoryIndex,false);
+            this.$body.css("background-color", this.respuesta[this.categoryIndex].color);
             this.currency = this.category.moneda;
             //this.$imagenIcon.attr("src", this.category.imagen);
             this.$montoCredito.text(this.currency + " " + this.category.montoCredito.formateado);
