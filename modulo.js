@@ -3,7 +3,15 @@
     var dashboard = {
         categories: auxFunctions.subArray(respuesta),
         init: function () {
+            
             respuesta = auxFunctions.sortData(respuesta);
+            auxFunctions.printImgEl(auxFunctions.subArrayImg(respuesta));
+            this.slider = $(".slider").slick({
+                arrows: false,
+                dots: false,
+            });
+            
+            //$(".slider").slick("slickGoTo",0,false);
             this.cacheElements();
             if (respuesta.length > 0) {
                 this.render();
@@ -11,6 +19,7 @@
                 this.error();
             }
             this.bindEvents();
+            
         },
         cacheElements: function () {
             this.$body = $("body");
@@ -32,27 +41,31 @@
                 categories: this.categories
             };
             this.$select.html(Mustache.render(this.template, data)),
-                this.setCategory();
+            this.setCategory();
+            
+            
         },
         error: function () {
-            console.log(this.$mainBody);
             this.$mainBody.addClass("hidden");
             this.$errorScreen.removeClass("hidden");
         },
         bindEvents: function () {
             this.$select.change(this.setCategory.bind(this));
+            /* $(".slider").on("beforeChange", function(event, slick, currentSlide, nextSlide){
+                getCategoryInfoSlide(nextSlide);
+        });*/
         },
         setCategory: function () {
             this.categoryIndex = $('#categories-select option:selected').index();
             this.category = respuesta[this.categoryIndex];
             this.$body.css("background-color", respuesta[this.categoryIndex].color);
             this.currency = this.category.moneda;
-            this.$imagenIcon.attr("src", this.category.imagen);
-            this.$montoCredito.text(this.currency+" "+this.category.montoCredito.formateado);
-            this.$montoDebito.text(this.currency+" "+this.category.montoDebito.formateado);
+            //this.$imagenIcon.attr("src", this.category.imagen);
+            this.$montoCredito.text(this.currency + " " + this.category.montoCredito.formateado);
+            this.$montoDebito.text(this.currency + " " + this.category.montoDebito.formateado);
             this.$fecha.text(this.category.fecha);
-            this.$saldo.text(this.currency+" "+this.category.saldo.formateado);
-            
+            this.$saldo.text(this.currency + " " + this.category.saldo.formateado);
+
             if (this.$montoCredito && this.$montoDebito) {
                 graph.renderCenterDonut(
                     this.category.montoDebito.valor,
@@ -60,7 +73,7 @@
                 graph.renderInnerDonut(
                     this.category.montoCredito.valor,
                     this.category.saldo.valor);
-                this.$graphValues =  auxFunctions.valoresHistoricos(this.category.historico);
+                this.$graphValues = auxFunctions.valoresHistoricos(this.category.historico);
                 graph.renderHistoryGraph(
                     this.$graphValues.meses,
                     this.$graphValues.valoresMensuales,

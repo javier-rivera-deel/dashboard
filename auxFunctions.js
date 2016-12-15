@@ -8,8 +8,12 @@ var auxFunctions = {
         });
         return subArray;
     },
-    meses: function () {
-
+    subArrayImg: function(obj){
+            var arrayImg = [];
+            arrayImg = obj.map(function (ob) {
+            return ob.imagen;
+        });
+        return arrayImg;
     },
     valoresHistoricos: function (historico) {
         var valoresMensuales = [];
@@ -19,9 +23,13 @@ var auxFunctions = {
         if (historico.length > 12) {
             historico = historico.slice(Math.max(historico.length - 12));
         };
+        valoresMensuales = historico.map(function (val) {
+            return val.importe.valor;
+        });
+
         $.each(historico, function (pos) {
             meses[pos] = labels[parseFloat(historico[pos].mes) - 1] + " " + historico[pos].anio;
-            valoresMensuales[pos] = historico[pos].importe.valor;
+            // valoresMensuales[pos] = historico[pos].importe.valor;
         });
         valoresMensuales.unshift(historico[0].importe.valor);
         //console.log(valoresMensuales.length);
@@ -50,5 +58,17 @@ var auxFunctions = {
         dataAux.push(dataEnd);
         data = dataAux;
         return data;
+    },
+    printImgEl: function (arrayOfsrc) {
+        $.each(arrayOfsrc, function (el) {
+            var imageContainer = document.createElement("div");
+            var imageIcon = document.createElement("img");
+            $(imageIcon).appendTo(imageContainer)
+                .attr({
+                "id": "icon-place",
+                "src": arrayOfsrc[el]
+            }).addClass("center-adjust relative img-responsive");
+            $(imageContainer).appendTo($(".slider"));
+        });
     }
-    } // end of object
+}; // end of object
