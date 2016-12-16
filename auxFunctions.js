@@ -1,19 +1,10 @@
 var auxFunctions = {
-    subArray: function (obj) {
-        var subArray = [];
-        subArray = obj.map(function (ob) {
-            var tempObj;
-            tempObj = ob.categoria;
-            return tempObj;
+    subArray: function (arr, prop) {
+        var newArr = [];
+        newArr = arr.map(function (x) {
+            return x[prop];
         });
-        return subArray;
-    },
-    subArrayImg: function(obj){
-            var arrayImg = [];
-            arrayImg = obj.map(function (ob) {
-            return ob.imagen;
-        });
-        return arrayImg;
+        return newArr;
     },
     valoresHistoricos: function (historico) {
         var valoresMensuales = [];
@@ -26,7 +17,6 @@ var auxFunctions = {
         valoresMensuales = historico.map(function (val) {
             return val.importe.valor;
         });
-
         $.each(historico, function (pos) {
             meses[pos] = labels[parseFloat(historico[pos].mes) - 1] + " " + historico[pos].anio;
             // valoresMensuales[pos] = historico[pos].importe.valor;
@@ -34,11 +24,11 @@ var auxFunctions = {
         valoresMensuales.unshift(historico[0].importe.valor);
         //console.log(valoresMensuales.length);
         return {
-            valoresMensuales: valoresMensuales,
-            meses: meses,
-            max: Math.max.apply(null, valoresMensuales)
+            valoresMensuales: valoresMensuales
+            , meses: meses
+            , max: Math.max.apply(null, valoresMensuales)
         };
-    },
+    }, 
     sortData: function sortData(data) {
         var dataEnd;
         var dataAux;
@@ -63,10 +53,9 @@ var auxFunctions = {
         $.each(arrayOfsrc, function (el) {
             var imageContainer = document.createElement("div");
             var imageIcon = document.createElement("img");
-            $(imageIcon).appendTo(imageContainer)
-                .attr({
-                "id": "icon-place",
-                "src": arrayOfsrc[el]
+            $(imageIcon).appendTo(imageContainer).attr({
+                "id": "icon-place"
+                , "src": arrayOfsrc[el]
             }).addClass("center-adjust relative img-responsive");
             $(imageContainer).appendTo($(".slider"));
         });

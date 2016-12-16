@@ -3,8 +3,9 @@
     var dashboard = {
         init: function () {
             this.respuesta = auxFunctions.sortData(respuesta);
-            this.categories = auxFunctions.subArray(this.respuesta),
-            auxFunctions.printImgEl(auxFunctions.subArrayImg(this.respuesta));
+            this.categories = auxFunctions.subArray(this.respuesta,"categoria");
+            auxFunctions.printImgEl(auxFunctions.subArray(this.respuesta,"imagen"));
+            console.log(this.categories);
             this.slider = $(".slider").slick({
                 arrows: false,
                 dots: false,
@@ -38,9 +39,7 @@
                 categories: this.categories
             };
             this.$select.html(Mustache.render(this.template, data)),
-            this.setCategory();
-            
-            
+            this.setCategory();  
         },
         error: function () {
             this.$mainBody.addClass("hidden");
@@ -55,12 +54,10 @@
         },
         setCategory: function () {
             this.categoryIndex = $('#categories-select option:selected').index();
-            
             this.category = this.respuesta[this.categoryIndex];
             $(".slider").slick("slickGoTo",this.categoryIndex,false);
             this.$body.css("background-color", this.respuesta[this.categoryIndex].color);
             this.currency = this.category.moneda;
-            //this.$imagenIcon.attr("src", this.category.imagen);
             this.$montoCredito.text(this.currency + " " + this.category.montoCredito.formateado);
             this.$montoDebito.text(this.currency + " " + this.category.montoDebito.formateado);
             this.$fecha.text(this.category.fecha);
