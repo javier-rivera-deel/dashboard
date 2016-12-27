@@ -63,12 +63,14 @@
             this.$saldo.text(this.currency + " " + this.category.saldo.formateado);
 
             if (this.$montoCredito && this.$montoDebito) {
-                graph.renderCenterDonut(
+                graph.renderDonut(
                     this.category.montoCredito.valor,
-                    this.category.saldo.valor);
-                graph.renderInnerDonut(
+                    this.category.saldo.valor,
+                    "outer");
+                graph.renderDonut(
                     this.category.montoDebito.valor,
-                    this.category.saldo.valor);
+                    this.category.saldo.valor,
+                    "inner");
                 this.$graphValues = auxFunctions.valoresHistoricos(this.category.historico);
                 graph.renderHistoryGraph(
                     this.$graphValues.meses,
