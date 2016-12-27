@@ -359,16 +359,16 @@ var respuesta = [
         "color": "#1988BD",
         "imagen": "img/hogar-01.png",
         "saldo": {
-            "valor": 0,
-            "formateado": "0,00"
+            "valor": 150,
+            "formateado": "150,00"
         },
         "montoDebito": {
-            "valor": 0,
-            "formateado": "0,00"
+            "valor": 75,
+            "formateado": "75,00"
         },
         "montoCredito": {
-            "valor": 0,
-            "formateado": "0,00"
+            "valor": 75,
+            "formateado": "75,00"
         },
         "moneda": "$",
         "historico": [

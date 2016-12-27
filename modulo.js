@@ -16,8 +16,7 @@
             } else {
                 this.error();
             }
-            this.bindEvents();
-            
+            this.bindEvents(); 
         },
         cacheElements: function () {
             this.$body = $("body");
@@ -46,11 +45,10 @@
             this.$errorScreen.removeClass("hidden");
         },
         bindEvents: function () {
-            
             this.$select.change(this.setCategory.bind(this));
             $(".slider").on("beforeChange", function(event, slick, currentSlide, nextSlide){
                 //this.setCategory(nextSlide);
-        });
+            });
         },
         setCategory: function () {
             this.categoryIndex = $('#categories-select option:selected').index();
@@ -66,10 +64,10 @@
 
             if (this.$montoCredito && this.$montoDebito) {
                 graph.renderCenterDonut(
-                    this.category.montoDebito.valor,
+                    this.category.montoCredito.valor,
                     this.category.saldo.valor);
                 graph.renderInnerDonut(
-                    this.category.montoCredito.valor,
+                    this.category.montoDebito.valor,
                     this.category.saldo.valor);
                 this.$graphValues = auxFunctions.valoresHistoricos(this.category.historico);
                 graph.renderHistoryGraph(
