@@ -48,14 +48,15 @@
         bindEvents: function () {
             
             this.$select.change(this.setCategory.bind(this));
-            /* $(".slider").on("beforeChange", function(event, slick, currentSlide, nextSlide){
-                getCategoryInfoSlide(nextSlide);
-        });*/
+            $(".slider").on("beforeChange", function(event, slick, currentSlide, nextSlide){
+                //this.setCategory(nextSlide);
+        });
         },
         setCategory: function () {
             this.categoryIndex = $('#categories-select option:selected').index();
             this.category = this.respuesta[this.categoryIndex];
             $(".slider").slick("slickGoTo",this.categoryIndex,false);
+            //this.$select.prop("selectedIndex", this.categoryIndex); 
             this.$body.css("background-color", this.respuesta[this.categoryIndex].color);
             this.currency = this.category.moneda;
             this.$montoCredito.text(this.currency + " " + this.category.montoCredito.formateado);

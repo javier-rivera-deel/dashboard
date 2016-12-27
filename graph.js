@@ -1,7 +1,7 @@
 var graph = {
     renderCenterDonut: function (monto, total) {
         var outergauge = new Chartist.Pie("#ct-gauge", {
-            series: [monto]
+            series: monto ? [monto] : [""] 
         }, {
             donut: true,
             donutWidth: 6,
@@ -31,7 +31,7 @@ var graph = {
     },
     renderInnerDonut: function (monto, total) {
         var innerGauge = new Chartist.Pie("#ct-gauge-small", {
-            series: [monto]
+            series: monto ? [monto] : [""]  
         }, {
             chartPadding: 19,
             donut: true,

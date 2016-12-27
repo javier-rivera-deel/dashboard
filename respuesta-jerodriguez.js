@@ -594,16 +594,16 @@ var respuesta = [
         "color": "#1fa76b",
         "imagen": "img/turismo-01.png",
         "saldo": {
-            "valor": 0,
-            "formateado": "0,00"
+            "valor": 500,
+            "formateado": "500,00"
         },
         "montoDebito": {
             "valor": 0,
             "formateado": "0,00"
         },
         "montoCredito": {
-            "valor": 0,
-            "formateado": "0,00"
+            "valor": 500,
+            "formateado": "500,00"
         },
         "moneda": "$",
         "historico": [
