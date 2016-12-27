@@ -1,5 +1,4 @@
 (function () {
-    //respuesta.length = 0;
     var dashboard = {
         init: function () {
             this.respuesta = auxFunctions.sortData(respuesta);
@@ -11,6 +10,7 @@
                 dots: false,
             });
             this.cacheElements();
+            this.respuesta.length = 0;
             if (this.respuesta.length > 0) {
                 this.render();
             } else {
