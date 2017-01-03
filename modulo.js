@@ -6,7 +6,6 @@
             this.categories = auxFunctions.subArray(this.respuesta,"categoria");
             auxFunctions.printImgEl(auxFunctions.subArray(this.respuesta,"imagen"));
             auxFunctions.printSelectEl(this.categories);
-            console.log(this.categories);
             this.slider = $(".slider").slick({
                 arrows: false,
                 dots: false,
@@ -34,6 +33,7 @@
             this.$montoCredito = $("#monto-tdc");
             this.$fecha = $("#fecha");
             this.$saldo = $("#saldo");
+            this.$slider = $(".slider");
         },
         render: function () {
             var data = {
@@ -47,16 +47,22 @@
             this.$errorScreen.removeClass("hidden");
         },
         bindEvents: function () {
+            
             this.$select.change(this.setCategory.bind(this));
+            this.$slider.on("beforeChange",this.changeSlide.bind(this));/*
             $(".slider").on("beforeChange", function(event, slick, currentSlide, nextSlide){
-                //this.setCategory(nextSlide);
-            });
+                console.log(nextSlide);
+                dashboard.setCategory(nextSlide);
+            });*/
+        },
+        setIndex:function(index){
+            this.$select.prop("selectedIndex", index); 
+            this.setCategory();
         },
         setCategory: function () {
             this.categoryIndex = $('#categories-select option:selected').index();
             this.category = this.respuesta[this.categoryIndex];
             $(".slider").slick("slickGoTo",this.categoryIndex,false);
-            //this.$select.prop("selectedIndex", this.categoryIndex); 
             this.$body.css("background-color", this.respuesta[this.categoryIndex].color);
             this.currency = this.category.moneda;
             this.$montoCredito.text(this.currency + " " + this.category.montoCredito.formateado);
@@ -81,6 +87,9 @@
                     this.currency);
             }
         },
+        changeSlide: function(event, slick, currentSlide, nextSlide){
+            this.setIndex(nextSlide);
+        }
     };
     dashboard.init();
 })();
