@@ -34,6 +34,7 @@
             this.$fecha = $("#fecha");
             this.$saldo = $("#saldo");
             this.$slider = $(".slider");
+            this.$resumen = $("#resumen");
         },
         render: function () {
             var data = {
@@ -59,28 +60,39 @@
             this.category = this.respuesta[this.categoryIndex];
             $(".slider").slick("slickGoTo",this.categoryIndex,false);
             this.$body.css("background-color", this.respuesta[this.categoryIndex].color);
-            this.currency = this.category.moneda;
-            this.$montoCredito.text(this.currency + " " + this.category.montoCredito.formateado);
-            this.$montoDebito.text(this.currency + " " + this.category.montoDebito.formateado);
             this.$fecha.text(this.category.fecha);
-            this.$saldo.text(this.currency + " " + this.category.saldo.formateado);
-
-            if (this.$montoCredito && this.$montoDebito) {
-                graph.renderDonut(
-                    this.category.montoCredito.valor,
-                    this.category.saldo.valor,
-                    "outer");
-                graph.renderDonut(
-                    this.category.montoDebito.valor,
-                    this.category.saldo.valor,
-                    "inner");
-                this.$graphValues = auxFunctions.valoresHistoricos(this.category.historico);
-                graph.renderHistoryGraph(
-                    this.$graphValues.meses,
-                    this.$graphValues.valoresMensuales,
-                    this.$graphValues.max,
-                    this.currency);
-            }
+            this.currency = this.category.moneda;
+            
+             if(this.category.sumaHistorico <= 0){
+                this.$montoCredito.text(this.currency + " " + this.category.montoCredito.formateado);
+                this.$montoDebito.text(this.currency + " " + this.category.montoDebito.formateado);
+                this.$saldo.text(this.currency + " " + this.category.saldo.formateado);'' 
+                $("#resumen").text("No se registran consumos.").addClass("center-text");
+                $(".ct-chart").hide();
+            }else{
+                $("#resumen").text("Registro comparativo histórico").removeClass("center-text");;
+                $(".ct-chart").show();
+                this.$montoCredito.text(this.currency + " " + this.category.montoCredito.formateado);
+                this.$montoDebito.text(this.currency + " " + this.category.montoDebito.formateado);
+                this.$saldo.text(this.currency + " " + this.category.saldo.formateado);
+            };
+                if(this.$montoCredito && this.$montoDebito) {
+                    graph.renderDonut(
+                        this.category.montoCredito.valor,
+                        this.category.saldo.valor,
+                        "outer");
+                    graph.renderDonut(
+                        this.category.montoDebito.valor,
+                        this.category.saldo.valor,
+                        "inner");
+                    this.$graphValues = auxFunctions.valoresHistoricos(this.category.historico);
+                    graph.renderHistoryGraph(
+                        this.$graphValues.meses,
+                        this.$graphValues.valoresMensuales,
+                        this.$graphValues.max,
+                        this.currency);
+                }
+            
         },
         changeSlide: function(event, slick, currentSlide, nextSlide){
             this.setIndex(nextSlide);

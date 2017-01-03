@@ -5,7 +5,7 @@ var graph = {
         }, {
             chartPadding: type === "inner" ? 13 : 0,
             donut: true,
-            donutWidth: "6em",
+            donutWidth: 6,
             startAngle: 0,
             total: total,
             showLabel: false

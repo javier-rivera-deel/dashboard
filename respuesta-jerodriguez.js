@@ -5,7 +5,7 @@ var respuesta = [
         "color": "#F4162A",
         "imagen": "img/automovil-01.png",
         "saldo": {
-            "valor": 1300.66,
+            "valor": 1261.66,
             "formateado": "961,66"
         },
         "montoDebito": {
@@ -124,16 +124,16 @@ var respuesta = [
         "color": "#93278F",
         "imagen": "img/indumentaria-01.png",
         "saldo": {
-            "valor": 5000.00,
-            "formateado": "5000,00"
+            "valor": 0.00,
+            "formateado": "0,00"
         },
         "montoDebito": {
-            "valor": 2500.00,
-            "formateado": "2500,00"
+            "valor": 0.00,
+            "formateado": "0,00"
         },
         "montoCredito": {
-            "valor": 2500.00,
-            "formateado": "2500,00"
+            "valor": 0.00,
+            "formateado": "0,00"
         },
         "moneda": "$",
         "historico": [
@@ -353,22 +353,23 @@ var respuesta = [
             "moneda": "$"
         }],
         "sumaHistorico": 0
-    }, {
+    }, 
+    {
         "categoria": "HOGAR",
         "fecha": "HASTA EL 21/10/2016",
         "color": "#1988BD",
         "imagen": "img/hogar-01.png",
         "saldo": {
-            "valor": 150,
-            "formateado": "150,00"
+            "valor": 0,
+            "formateado": "0,00"
         },
         "montoDebito": {
-            "valor": 75,
-            "formateado": "75,00"
+            "valor": 0,
+            "formateado": "0,00"
         },
         "montoCredito": {
-            "valor": 75,
-            "formateado": "75,00"
+            "valor": 0,
+            "formateado": "0,00"
         },
         "moneda": "$",
         "historico": [
@@ -469,7 +470,7 @@ var respuesta = [
             },
             "moneda": "$"
         }],
-        "sumaHistorico": 5000
+        "sumaHistorico": 0
     },
     {
         "categoria": "SUPERMERCADOS",
@@ -588,22 +589,23 @@ var respuesta = [
                 "moneda": "$"
             }],
         "sumaHistorico": 5000
-    }, {
+    },
+    {
         "categoria": "TURISMO",
         "fecha": "HASTA EL 21/10/2016",
         "color": "#1fa76b",
         "imagen": "img/turismo-01.png",
         "saldo": {
-            "valor": 500,
-            "formateado": "500,00"
+            "valor": 0,
+            "formateado": "0,00"
         },
         "montoDebito": {
             "valor": 0,
             "formateado": "0,00"
         },
         "montoCredito": {
-            "valor": 500,
-            "formateado": "500,00"
+            "valor": 0,
+            "formateado": "0,00"
         },
         "moneda": "$",
         "historico": [
@@ -705,7 +707,8 @@ var respuesta = [
             "moneda": "$"
         }],
         "sumaHistorico": 0
-    }, {
+    },
+    {
         "categoria": "OTROS",
         "fecha": "HASTA EL 21/10/2016",
         "color": "#2C4E8E",
@@ -822,4 +825,5 @@ var respuesta = [
             "moneda": "$"
         }],
         "sumaHistorico": 5000
-    }]
+    }
+]
