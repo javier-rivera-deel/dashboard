@@ -1,0 +1,466 @@
+<script>
+    function mobileInfo(JSONBUFFER) {
+        var strMessage = JSON.stringify(JSONBUFFER);
+        if (window.webkit && window.webkit.messageHandlers) webkit.messageHandlers.initApp.postMessage(strMessage);
+        else if (window.external && typeof window.external.notify == 'unknown') window.external.notify(strMessage);
+        else {
+            console.log(strMessage); /*        if (typeof Android == 'undefined' ) {            var Android = this.parent.Android;                  Android.proxy(strMessage);           }else*/
+            Android.proxyJavascript(strMessage);
+        }
+    }
+    var os = navigator.platform;
+    var limite, automovil, gastronomia;
+    if (os.includes('Linux')) {
+        limite = 'Límite';
+        automovil = 'AUTOMÓVIL';
+        gastronomia = 'GASTRONOMÍA';
+    }
+    else if (os.includes('iPhone')) {
+        limite = 'Límite';
+        automovil = 'AUTOMÓVIL';
+        gastronomia = 'GASTRONOMÍA';
+    }; /* var donutTitle       =  'Consumo por Rubro';  var donutSubtitle    =  'HASTA EL 04/02/2016';  var donutLabelTotal  =  'CONSUMIDO';*/
+    var donutCanvas = 'grafico1';
+    var donutChartAction = 'Ver_rubros'; /*var barsTitle       = 'Estado Global de Tarjetas';  var barsSubtitle    = 'Febrero 2010';*/
+    var barsCanvas = 'grafico2';
+    var barsChartAction = 'Ver_limites';
+</script>
+<html>
+
+<head>
+    <meta http-equiv='content-type' content='text/html; charset=UTF-8'>
+    <!--BOOTSTRAP_3.6.6_CSS-->
+    <!--BOOTSTRAP_3.6.6_CSS_MOD_disabled--->
+    <style>
+        body {
+            width: 100%;
+            padding: 0px;
+        }
+        
+        #grafico1 {
+            display: block;
+            float: left;
+            width: 100%;
+        }
+        
+        #grafico2 {
+            display: block;
+            float: left;
+            width: 100%;
+        }
+        
+        #slider {
+            display: block;
+            float: left;
+            width: 100%;
+        }
+        
+        .carousel-control.right {
+            background: none;
+        }
+        
+        .carousel-control.left {
+            background: none;
+        }
+        /*   @font-face {  font-family: 'Glyphicons Halflings';  src: url('http://10.1.4.91:9190/files.v3/FileServer/PR.58/[85]Files/resources/Bootstrap/fonts/glyphicons-halflings-regular.eot');  src: url('http://10.1.4.91:9190/files.v3/FileServer/PR.58/[85]Files/resources/Bootstrap/fonts/glyphicons-halflings-regular.eot?#iefix') format('embedded-opentype'), url('http://10.1.4.91:9190/files.v3/FileServer/PR.58/[85]Files/resources/Bootstrap/fonts/glyphicons-halflings-regular.woff2') format('woff2'), url('http://10.1.4.91:9190/files.v3/FileServer/PR.58/[85]Files/resources/Bootstrap/fonts/glyphicons-halflings-regular.woff') format('woff'), url('http://10.1.4.91:9190/files.v3/FileServer/PR.58/[85]Files/resources/Bootstrap/fonts/glyphicons-halflings-regular.ttf') format('truetype'), url('http://10.1.4.91:9190/files.v3/FileServer/PR.58/[85]Files/resources/Bootstrap/fonts/glyphicons-halflings-regular.svg#glyphicons_halflingsregular') format('svg');}*/
+        /*FLECHAS*/
+    </style>
+</head>
+
+<body>
+    <style>
+        .dash-background {
+            /*    background-color: #eda76a;*/
+        }
+    </style>
+    <div id='slider' class='carousel slide dash-background' data-ride='carousel'>
+        <div class='carousel-inner' role='listbox' width='600' height='325'>
+            <div class='item active'>
+                <canvas id='grafico1' width='1200' height='650'></canvas>
+            </div>
+            <div class='item'>
+                <canvas id='grafico2' width='600' height='325'></canvas>
+            </div>
+        </div>
+        <div class='izquierda'>
+            <style>
+                .alto {
+                    height: 100%;
+                    margin: 0;
+                    /*  background-color: #fbd742;*/
+                }
+                
+                .vertical-centered {
+                    position: absolute;
+                    top: 47%;
+                    /*background-color: #6dc066;*/
+                }
+                
+                .float-left {
+                    position: absolute;
+                    left: 8%;
+                    float: left;
+                }
+                
+                .float-right {
+                    position: absolute;
+                    right: -9%;
+                    float: right;
+                }
+                /*FIX_FLECHA_IOS*/
+            </style>
+            <a class=' left carousel-control' href='#slider' role='button' data-slide='prev'>
+                <div class='alto'>
+                    <!--LEFT_CHEVRON-->
+                </div><span class='sr-only'>Previous</span></a>
+        </div>
+        <a class='right carousel-control' href='#slider' role='button' data-slide='next'>
+            <div class='alto'>
+                <!--RIGHT_CHEVRON-->
+            </div><span class='sr-only'>Next</span></a>
+    </div>
+    <!--JQUERY-->
+    <!--BOOTSTRAP_JS-->
+    <!--NUMERAL_JS-->
+    <script>
+        if (donutData.length > 1) {
+            $('#' + donutCanvas).click(function () {
+                var obj = {
+                    'event': 'click'
+                    , 'target': targetVar
+                    , 'action': donutChartAction
+                };
+                var strObj = JSON.stringify(obj);
+                mobileInfo(obj);
+            });
+            donutData = sortData(donutData);
+            donutChart(donutData, donutCanvas, donutTitle, donutSubtitle, donutLabelTotal, totalSumDonut);
+        }
+        else {
+            dataEmptyDonutChart(donutCanvas, donutTitle, donutSubtitle, donutLabelTotal, totalSumDonut);
+        } /*nueva funcion de formateo*/
+        Number.prototype.formatMoney = function (places, symbol, thousand, decimal) {
+            places = !isNaN(places = Math.abs(places)) ? places : 2;
+            thousand = thousand || '.';
+            decimal = decimal || ',';
+            var number = this
+                , negative = number < 0 ? '-' : ''
+                , i = parseInt(number = Math.abs(+number || 0).toFixed(places), 10) + ''
+                , j = (j = i.length) > 3 ? j % 3 : 0;
+            return negative + (j ? i.substr(0, j) + thousand : '') + i.substr(j).replace(/(\d{3})(?=\d)/g, '$1' + thousand) + (places ? decimal + Math.abs(number - i).toFixed(places).slice(2) : '');
+        }; /*fin nueva funcion formateo*/
+        function maskNumber(num) { /*var Exp = /(\d+)(\d{3})/;        while (Exp.test(number)) {          number = number.replace(Exp, '$1' + '.' + '$2');        }*/
+            var number = numeral(num);
+            number.format();
+            numeral.defaultFormat('0,0.00');
+            return number.format();
+        }
+
+        function sortData(data) {
+            for (var i in data) {
+                if (data[i].label == 'Otros') {
+                    var aux = data[data.length - 1];
+                    data[data.length - 1] = data[i];
+                    data[i] = aux;
+                    break;
+                }
+            }
+            dataEnd = data[data.length - 1];
+            dataAux = data.splice(0, data.length - 1);
+            dataAux.sort(function (a, b) {
+                return b.value - a.value;
+            });
+            dataAux.push(dataEnd);
+            data = dataAux;
+            return data;
+        }
+
+        function dataEmptyDonutChart(canvasName, title, subtitle, labelTotal) {
+            var mensajeSinDatos = 'No se registran consumos en este periodo.';
+            var canvas = document.getElementById(canvasName);
+            var escala = document.body.Width / 600;
+            canvas.style.width = canvas.style.width * escala + 'px';
+            canvas.style.height = canvas.style.height * escala + 'px';
+            var ctx = canvas.getContext('2d');
+            var fontSize = 0;
+            x = (canvas.width / 2) + (200 / 325) * (canvas.height) * Math.cos(225 * Math.PI / 180);
+            y = (canvas.height / 2) + (200 / 325) * (canvas.height) * Math.sin(225 * Math.PI / 180);
+            x = x - (120 / 600) * canvas.width;
+            y = y + (20 / 325) * canvas.height;
+            ctx.fillStyle = '#333';
+            fontSize = (25 / 325) * canvas.height;
+            ctx.font = fontSize.toString() + 'px Arial';
+            ctx.fillText(title, x, y);
+            y = y + (25 / 325) * canvas.height;
+            ctx.fillStyle = '#888';
+            fontSize = (18 / 325) * canvas.height;
+            ctx.font = fontSize.toString() + 'px Arial';
+            ctx.fillText(subtitle, x, y);
+            x = (canvas.width / 2) - (180 / 600) * (canvas.width);
+            y = (canvas.height / 2) - (20 / 325) * (canvas.height);
+            ctx.fillStyle = '#888';
+            fontSize = (18 / 325) * canvas.height;
+            ctx.font = fontSize.toString() + 'px Arial';
+            ctx.fillText(mensajeSinDatos, x, y);
+        } /*  var automovil, gastronomia;                        if(os.includes('Linux')){                automovil = 'AUTOMIL';                gastronomia = 'GASTRONOA';            }            else if(os.includes('iPhone')){                 automovil = 'AUTOMoVIL';                 gastronomia = 'GASTRONOMoA';            }*/
+        function cargaImagenes(imageArray, images, index) { 
+            index = index || 0;     
+            if (imageArray && imageArray.length > index) {
+                var img = new Image();
+                img.onload = function () {
+                    cargaImagenes(imageArray, images, index + 1);
+                };
+                img.src = donutIcons[imageArray[index].label];
+                images.push(img);
+            }
+        }
+
+        function donutChart(data, canvasName, title, subtitle, labelTotal, SumDonut) {
+            var images = [];  
+            var canvas = document.getElementById(canvasName);
+            var escala = document.body.Width / 600;
+            canvas.style.width = canvas.style.width * escala + 'px';
+            canvas.style.height = canvas.style.height * escala + 'px';  
+            for (i in data) {
+                var img = new Image();
+                img.src = donutIcons[data[i].label];
+                images.push(img);
+            } 
+            for (var  i = 0; i <  images.length; i++) {
+                if (images[i] === null)  { 
+                    i = 0;
+                }
+            }    /*Carga de las imagenes*/  
+            var img = images[images.length - 1];
+            img.onload = function () { /* Obtenemos el contexto plano (2d) */
+                var ctx = canvas.getContext('2d');
+                var total = 0
+                    , angles = []
+                    , startAngle = 0
+                    , endAngle = 0
+                    , medAngle, rext = 0
+                    , fontSize = 0; /*Calculo del total de consumos*/
+                for (var i in data) total += parseFloat(data[i].value);
+                x = (canvas.width / 2) + (200 / 325) * (canvas.height) * Math.cos(225 * Math.PI / 180);
+                y = (canvas.height / 2) + (200 / 325) * (canvas.height) * Math.sin(225 * Math.PI / 180);
+                x = x - (120 / 600) * canvas.width;
+                y = y + (20 / 325) * canvas.height;
+                ctx.fillStyle = '#333';
+                fontSize = (25 / 325) * canvas.height;
+                ctx.font = fontSize.toString() + 'px Arial';
+                ctx.fillText(title, x, y);
+                y = y + (25 / 325) * canvas.height;
+                ctx.fillStyle = '#888';
+                fontSize = (18 / 325) * canvas.height;
+                ctx.font = fontSize.toString() + 'px Arial';
+                ctx.fillText(subtitle, x, y);
+                y = y + (200 / 325) * canvas.height;
+                ctx.fillStyle = '#333';
+                fontSize = (18 / 325) * canvas.height;
+                ctx.font = fontSize.toString() + 'px Arial';
+                ctx.fillText(labelTotal, x, y);
+                y = y + (30 / 325) * canvas.height;
+                ctx.fillStyle = '#1988bd';
+                fontSize = (28 / 325) * canvas.height;
+                ctx.font = fontSize.toString() + 'px Arial'; /*valueNumber.formatMoney() sintaxis para llamar formatMoney*/ /*ctx.fillText(data[1].moneda+' '+maskNumber(total.toString()),x,y); antigua*/ /*total = 9999999.00;*/
+                ctx.fillText(data[1].moneda + ' ' + totalSumDonut, x, y); /*Calculo del los porcentjes de la torta*/
+                for (var i in data) {
+                    var angle = (parseFloat(data[i].value) / total) * 360;
+                    angle = angle.toString();
+                    data[i].angle = angle;
+                }
+                if (data.length == 0) {
+                    y = (canvas.height / 2);
+                    x = (canvas.width / 2);
+                    ctx.fillStyle = '#888';
+                    fontSize = (18 / 325) * canvas.height;
+                    ctx.font = fontSize.toString() + 'px Arial';
+                    ctx.fillText('No hay datos', x, y);
+                }
+                for (var i in data) {
+                    rext = (200 / 325) * (canvas.height);
+                    endAngle = startAngle + parseFloat(data[i].angle);
+                    ctx.beginPath(); /*iniciar ruta*/
+                    ctx.strokeStyle = donutColors[data[i].label]; /*color de línea*/
+                    ctx.lineWidth = (45 / 325) * canvas.height; /*grosor dee línea*/
+                    ctx.arc(canvas.width / 2 - (25 / 600) * canvas.width, canvas.height / 2, (80 / 325) * canvas.height, startAngle * Math.PI / 180, endAngle * Math.PI / 180);
+                    ctx.stroke();
+                    startAngle = endAngle;
+                    x = (canvas.width / 2) + rext * Math.cos(325 * Math.PI / 180);
+                    y = (canvas.height / 2) + rext * Math.sin(325 * Math.PI / 180);
+                    x -= (70 / 600) * canvas.height;
+                    y = y + i * (35 / 325) * canvas.height;
+                    ctx.beginPath();
+                    ctx.fillStyle = donutColors[data[i].label];
+                    ctx.arc(x, y, (15 / 325) * canvas.height, 0, 2 * Math.PI, false);
+                    ctx.fill();
+                    var x = x - (10 / 325) * canvas.height;
+                    var y = y - (10 / 325) * canvas.height;
+                    ctx.drawImage(images[i], x, y, (20 / 325) * canvas.height, (20 / 325) * canvas.height);
+                    x = (canvas.width / 2) + rext * Math.cos(325 * Math.PI / 180);
+                    y = (canvas.height / 2) + rext * Math.sin(325 * Math.PI / 180);
+                    x -= (40 / 600) * canvas.width;
+                    y = y + i * (20 / 325) * canvas.height;
+                    var offsetx = (25 / 600) * canvas.width;
+                    var offsety = -(2 / 325) * canvas.height + i * (15 / 325) * canvas.height; /*        if(data[i].label == 'AUTOMOVIL'){                data[i].label = automovil;            }                 var os = navigator.platform;            if(data[i].label === 'GASTRONOMIA' && os.includes('Linux')){                data[i].label = 'gastro';            };*/
+                    x = x + offsetx;
+                    y = y + offsety;
+                    if (data[i].label === 'AUTOMOVIL') {
+                        data[i].label = automovil;
+                    }
+                    else if (data[i].label === 'GASTRONOMIA') {
+                        data[i].label = gastronomia;
+                    }
+                    ctx.fillStyle = '#777';
+                    fontSize = (15 / 325) * canvas.height;
+                    ctx.font = fontSize.toString() + 'px Arial';
+                    ctx.fillText(data[i].label, x, y);
+                    y = y + (15 / 325) * canvas.height;
+                    ctx.fillStyle = '#000';
+                    fontSize = (15 / 325) * canvas.height;
+                    ctx.font = fontSize.toString() + 'px Arial'; /*  ctx.fillText(data[i].moneda +' '+ data[i].value,x,y);*/
+                    var newVal = parseFloat(data[i].value);
+                    var formatval = newVal.formatMoney(); /*  var formatVal = newVal.formatMoney();*/ /*  ctx.fillText(data[i].moneda +' '+ maskNumber(data[i].value),x,y);*/ /*ctx.fillText(data[1].moneda+' '+total.formatMoney(),x,y); */ /*aqui se inserta el valor para cada categoria        ctx.fillText(data[1].moneda+' '+formatval,x,y); */
+                    ctx.fillText(data[1].moneda + ' ' + data[i].formated, x, y);
+                }
+            };
+        }
+
+        function formatNumber(num) { /*return  barsData[0].value.replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')*/ }
+        if (barsData[2].value > 1) {
+            $('#' + barsCanvas).click(function () {
+                var obj = {
+                    'event': 'click'
+                    , 'target': targetVar
+                    , 'action': barsChartAction
+                };
+                var strObj = JSON.stringify(obj);
+                mobileInfo(obj);
+            });
+            barsChart(barsData, barsCanvas, barsTitle, barsSubtitle);
+        }
+        else {
+            dataEmptyBarsChart(barsCanvas, barsTitle, barsSubtitle);
+        }
+
+        function dataEmptyBarsChart(canvasName, title, subtitle) {
+            var canvas = document.getElementById(canvasName); /* Obtenemos el contexto plano (2d) */
+            var ctx = canvas.getContext('2d');
+            var mensajeSinDatos = 'No se registran consumos en este periodo';
+            x = (canvas.width / 2) + (200 / 325) * (canvas.height) * Math.cos(225 * Math.PI / 180);
+            y = (canvas.height / 2) + (200 / 325) * (canvas.height) * Math.sin(225 * Math.PI / 180);
+            x = x - (120 / 600) * canvas.width;
+            y = y + (20 / 325) * canvas.height;
+            ctx.fillStyle = '#333';
+            fontSize = (25 / 325) * canvas.height;
+            ctx.font = fontSize.toString() + 'px Arial';
+            ctx.fillText(title, x, y);
+            ctx.stroke();
+            y = y + (10 / 325) * canvas.height;
+            x = canvas.width - (200 / 600) * canvas.width;
+            ctx.fillStyle = '#888';
+            fontSize = (18 / 325) * canvas.height;
+            ctx.font = fontSize.toString() + 'px Arial';
+            ctx.fillText(subtitle, x, y);
+            ctx.stroke();
+            x = (canvas.width / 2) - (180 / 600) * (canvas.width);
+            y = (canvas.height / 2) - (20 / 325) * (canvas.height);
+            ctx.fillStyle = '#888';
+            fontSize = (18 / 325) * canvas.height;
+            ctx.font = fontSize.toString() + 'px Arial';
+            ctx.fillText(mensajeSinDatos, x, y);
+        }
+
+        function barsChart(data, canvasName, title, subtitle) {
+            var canvas = document.getElementById(canvasName); /* Obtenemos el contexto plano (2d) */
+            var escala = document.body.Width / 600;
+            canvas.style.width = canvas.style.width * escala + 'px';
+            canvas.style.height = canvas.style.height * escala + 'px';
+            var ctx = canvas.getContext('2d');
+            x = (canvas.width / 2) + (200 / 325) * (canvas.height) * Math.cos(225 * Math.PI / 180);
+            y = (canvas.height / 2) + (200 / 325) * (canvas.height) * Math.sin(225 * Math.PI / 180);
+            x = x - (120 / 600) * canvas.width;
+            y = y + (20 / 325) * canvas.height;
+            ctx.fillStyle = '#333';
+            fontSize = (25 / 325) * canvas.height;
+            ctx.font = fontSize.toString() + 'px Arial';
+            ctx.fillText(title, x, y);
+            ctx.stroke();
+            y = y + (10 / 325) * canvas.height;
+            x = canvas.width - (200 / 600) * canvas.width;
+            ctx.fillStyle = '#888';
+            fontSize = (18 / 325) * canvas.height;
+            ctx.font = fontSize.toString() + 'px Arial';
+            ctx.fillText(subtitle, x, y);
+            ctx.stroke();
+            for (i in data) {
+                x = (canvas.width / 2) + (200 / 325) * (canvas.height) * Math.cos(225 * Math.PI / 180);
+                x = x - (60 / 600) * canvas.width;
+                y = y + (50 / 325) * canvas.height;
+                ctx.beginPath();
+                ctx.fillStyle = barsColors[data[i].label];
+                fontSize = (18 / 325) * canvas.height;
+                ctx.font = fontSize.toString() + 'px Arial';
+                var placeholder;
+                if (data[i].label === 'Limite') {
+                    data[i].label = limite;
+                }
+                ctx.fillText(data[i].label, x, y);
+                ctx.stroke();
+                ctx.beginPath();
+                ctx.fillStyle = barsColors[data[i].label];
+                fontSize = (18 / 325) * canvas.height;
+                var xnueva = x;
+                var ynueva = y;
+                var valuea = parseFloat(data[i].total);
+                var formatValuea = valuea.formatMoney();
+                x = canvas.width - fontSize * (formatValuea.length + 5);
+                ctx.font = fontSize.toString() + 'px Arial'; /*aqui se fija el valor total para tarjetas*/
+                ctx.fillText(data[i].moneda + ' ' + data[2].formatedTotal, x, y);
+                ctx.stroke();
+                ynueva += 19;
+                y += 20;
+                var valueb = parseFloat(data[i].value);
+                var formatValueb = valueb.formatMoney();
+                ctx.font = fontSize.toString() + 'px Arial';
+                ctx.fillText(data[i].moneda + ' ' + data[i].formatedValue, xnueva, ynueva);
+                ctx.stroke();
+                var lineWidth = (canvas.width * (200 / 325));
+                perc1 = (data[i].value / data[i].total);
+                perc2 = 1 - perc1;
+                ctx.beginPath();
+                ctx.strokeStyle = barsColors[data[i].label];
+                ctx.lineWidth = 8;
+                x = canvas.width * 10 / 100;
+                x = (canvas.width / 2) + (200 / 325) * (canvas.height) * Math.cos(225 * Math.PI / 180);
+                x = x - (32 / 325) * canvas.width;
+                var y2 = y + 16;
+                ctx.moveTo(x, y2);
+                x = x + (perc1 * lineWidth);
+                ctx.lineTo(x, y2);
+                ctx.stroke();
+                ctx.globalAlpha = 0.5;
+                ctx.beginPath();
+                ctx.strokeStyle = barsColors[data[i].label];
+                ctx.globalAlpha = 0.5;
+                ctx.lineWidth = 8;
+                ctx.moveTo(x, y2);
+                x = x + perc2 * lineWidth;
+                ctx.lineTo(x, y2);
+                ctx.stroke();
+                ctx.globalAlpha = 1;
+            }
+        }
+    </script>
+    <script>
+        $(function () {
+            $('.carousel').each(function () {
+                $(this).carousel({
+                    interval: false
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>

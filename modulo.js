@@ -2,15 +2,17 @@
     var dashboard = {
         init: function () {
             this.respuesta = auxFunctions.sortData(respuesta);
+            console.log(this.respuesta);
             this.categories = auxFunctions.subArray(this.respuesta,"categoria");
             auxFunctions.printImgEl(auxFunctions.subArray(this.respuesta,"imagen"));
+            auxFunctions.printSelectEl(this.categories);
             console.log(this.categories);
             this.slider = $(".slider").slick({
                 arrows: false,
                 dots: false,
             });
             this.cacheElements();
-            this.respuesta.length = 0;
+            //this.respuesta.length = 0;
             if (this.respuesta.length > 0) {
                 this.render();
             } else {
@@ -37,7 +39,7 @@
             var data = {
                 categories: this.categories
             };
-            this.$select.html(Mustache.render(this.template, data)),
+            //this.$select.html(Mustache.render(this.template, data)),
             this.setCategory();  
         },
         error: function () {
