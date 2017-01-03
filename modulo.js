@@ -47,13 +47,8 @@
             this.$errorScreen.removeClass("hidden");
         },
         bindEvents: function () {
-            
             this.$select.change(this.setCategory.bind(this));
-            this.$slider.on("beforeChange",this.changeSlide.bind(this));/*
-            $(".slider").on("beforeChange", function(event, slick, currentSlide, nextSlide){
-                console.log(nextSlide);
-                dashboard.setCategory(nextSlide);
-            });*/
+            this.$slider.on("beforeChange",this.changeSlide.bind(this));
         },
         setIndex:function(index){
             this.$select.prop("selectedIndex", index); 
