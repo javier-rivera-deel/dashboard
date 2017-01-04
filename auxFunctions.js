@@ -29,26 +29,6 @@ var auxFunctions = {
             , max: Math.max.apply(null, valoresMensuales)
         };
     }, 
-    sortData: function sortData(data) {
-        var dataEnd;
-        var dataAux;
-        for (var i in data) {
-            if (data[i].categoria === "OTROS") {
-                var aux = data[data.length - 1];
-                data[data.length - 1] = data[i];
-                data[i] = aux;
-                break;
-            }
-        }
-        dataEnd = data[data.length - 1];
-        dataAux = data.splice(0, data.length - 1);
-        dataAux.sort(function (a, b) {
-            return b.saldo.valor - a.saldo.valor;
-        });
-        dataAux.push(dataEnd);
-        data = dataAux;
-        return data;
-    },
     printImgEl: function (arrayOfsrc) {
         $.each(arrayOfsrc, function (el) {
             var imageContainer = document.createElement("div");
@@ -69,6 +49,7 @@ var auxFunctions = {
     sortData: function (data){
     var dataEnd;
     var dataAux;
+    var splicedArray = [];
     for (var i in data) {
         if (data[i].categoria === "OTROS") {
             var aux = data[data.length - 1];
@@ -84,6 +65,12 @@ var auxFunctions = {
     });
     dataAux.push(dataEnd);
     data = dataAux;
-    return data;
+    var length = data.length;
+    for(var i = 0; i<length;i++){
+        if(data[i].sumaHistorico > 0){
+              splicedArray.push(data[i]);
+        }
+    }
+    return splicedArray;
 },
-}; // end of object
+};

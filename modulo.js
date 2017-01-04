@@ -2,7 +2,7 @@
     var dashboard = {
         init: function () {
             this.respuesta = auxFunctions.sortData(respuesta);
-            console.log(this.respuesta);
+            //console.log(this.respuesta);
             this.categories = auxFunctions.subArray(this.respuesta,"categoria");
             auxFunctions.printImgEl(auxFunctions.subArray(this.respuesta,"imagen"));
             auxFunctions.printSelectEl(this.categories);
