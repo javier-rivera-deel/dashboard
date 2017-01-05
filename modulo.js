@@ -1,8 +1,10 @@
 (function () {
     var dashboard = {
         init: function () {
+            $(window).on("load", function(){
+               $(".se-pre-con").hide();
+            });
             this.respuesta = auxFunctions.sortData(respuesta);
-            //console.log(this.respuesta);
             this.categories = auxFunctions.subArray(this.respuesta,"categoria");
             auxFunctions.printImgEl(auxFunctions.subArray(this.respuesta,"imagen"));
             auxFunctions.printSelectEl(this.categories);
@@ -50,6 +52,7 @@
         bindEvents: function () {
             this.$select.change(this.setCategory.bind(this));
             this.$slider.on("beforeChange",this.changeSlide.bind(this));
+            
         },
         setIndex:function(index){
             this.$select.prop("selectedIndex", index); 
@@ -76,27 +79,27 @@
                 this.$montoDebito.text(this.currency + " " + this.category.montoDebito.formateado);
                 this.$saldo.text(this.currency + " " + this.category.saldo.formateado);
             };
-                if(this.$montoCredito && this.$montoDebito) {
-                    graph.renderDonut(
-                        this.category.montoCredito.valor,
-                        this.category.saldo.valor,
-                        "outer");
-                    graph.renderDonut(
-                        this.category.montoDebito.valor,
-                        this.category.saldo.valor,
-                        "inner");
-                    this.$graphValues = auxFunctions.valoresHistoricos(this.category.historico);
-                    graph.renderHistoryGraph(
-                        this.$graphValues.meses,
-                        this.$graphValues.valoresMensuales,
-                        this.$graphValues.max,
-                        this.currency);
-                }
+            if(this.$montoCredito && this.$montoDebito) {
+                graph.renderDonut(
+                    this.category.montoCredito.valor,
+                    this.category.saldo.valor,
+                    "outer");
+                graph.renderDonut(
+                    this.category.montoDebito.valor,
+                    this.category.saldo.valor,
+                    "inner");
+                this.$graphValues = auxFunctions.valoresHistoricos(this.category.historico);
+                graph.renderHistoryGraph(
+                    this.$graphValues.meses,
+                    this.$graphValues.valoresMensuales,
+                    this.$graphValues.max,
+                    this.currency);
+            }
             
         },
         changeSlide: function(event, slick, currentSlide, nextSlide){
             this.setIndex(nextSlide);
-        }
+        },
     };
     dashboard.init();
 })();

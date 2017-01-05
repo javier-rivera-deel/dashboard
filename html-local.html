@@ -15,20 +15,22 @@
         <link href="https://fonts.googleapis.com/css?family=Open+Sans:300" rel="stylesheet">
     </head>
     <body>
+        <div class="se-pre-con"></div>
         <div class="container-fluid" id="main-screen">
             <div class="row noPadding">
                 <div class="col-xs-12 vista-header noPadding">
-                    <h4 class="inline headerTitle">Dashboard</h4>
+                    <img src="img/back-android.png"  id="backArrow" class="inline arrow">
+                    <h4 class="inline headerTitle">Detalle por rubro</h4>
                     <h3 id="categoria-slide"></h3>
                 </div>
             </div>
-            <!--TEMPLATE DEBERIA EMPEZAR AQUI-->
             <div class="row vista-resumen">
                 <div class="col-xs-7">
                     <div class="row">
                         <div class="noPadding col-xs-12">
                             <select class="absolute inline" name="" id="categories-select">
                             </select>
+                            <img class="floatRight fix-flecha" src="img/arrow-select.png">
                         </div>
                     </div>
                 </div>
@@ -107,13 +109,9 @@
         <script src="lib/chartistjs/chartist.min.js"></script>
         <!--SLICK-->
         <script src="lib/slick-1.6.0/slick/slick.min.js"></script>
-        <!--MUSTACHE_JS-->
-        <script src="lib/mustache.js-master/mustache.min.js"></script>
         <script src="respuesta-jerodriguez.js"></script>
         <script src="auxFunctions.js"></script>
         <script src="graph.js"></script>
-        <!--<script src="sortData.js"></script>-->
-        <!--<script src="subArray.js"></script>-->
         <script src="modulo.js"></script>
     </body>
 </html>
